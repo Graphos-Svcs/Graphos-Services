@@ -1,0 +1,233 @@
+/* أنيميشن متقدمة */
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+@keyframes glow {
+    0% { 
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.5),
+                     0 0 20px rgba(212, 175, 55, 0.3);
+    }
+    100% { 
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.8),
+                     0 0 40px rgba(212, 175, 55, 0.6),
+                     0 0 60px rgba(212, 175, 55, 0.4);
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes bounce {
+    0%, 20%, 53%, 80%, 100% {
+        transform: translate3d(0,0,0);
+    }
+    40%, 43% {
+        transform: translate3d(0,-15px,0);
+    }
+    70% {
+        transform: translate3d(0,-7px,0);
+    }
+    90% {
+        transform: translate3d(0,-3px,0);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* تطبيق الأنيميشن */
+.logo {
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+.shape {
+    animation: float 6s ease-in-out infinite;
+}
+
+.shape-1 { animation-delay: 0s; }
+.shape-2 { animation-delay: 1.5s; }
+.shape-3 { animation-delay: 3s; }
+.shape-4 { animation-delay: 4.5s; }
+
+.ai-badge {
+    animation: pulse 2s infinite;
+}
+
+.service-card {
+    opacity: 0;
+    animation: slideInUp 0.6s ease forwards;
+}
+
+.service-card:nth-child(1) { animation-delay: 0.1s; }
+.service-card:nth-child(2) { animation-delay: 0.2s; }
+.service-card:nth-child(3) { animation-delay: 0.3s; }
+.service-card:nth-child(4) { animation-delay: 0.4s; }
+.service-card:nth-child(5) { animation-delay: 0.5s; }
+.service-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* شريط التحميل */
+.loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--gold-gradient);
+    width: 0%;
+    z-index: 9999;
+    transition: width 0.4s ease;
+}
+
+/* الجسيمات العائمة */
+.floating-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    background: var(--secondary);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float 8s infinite linear;
+}
+
+/* أنيميشن بوت الذكاء الاصطناعي */
+.ai-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--gold-gradient);
+    opacity: 0;
+    animation: pulse 2s infinite;
+}
+
+.ai-toggle {
+    animation: bounce 2s infinite;
+}
+
+.status.online::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 5px;
+    animation: pulse 2s infinite;
+}
+
+/* أنيميشن الرسائل */
+.message {
+    animation: slideInUp 0.3s ease;
+}
+
+.typing-indicator {
+    display: inline-flex;
+    gap: 3px;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--secondary);
+    border-radius: 50%;
+    animation: bounce 1.4s infinite;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+.typing-dot:nth-child(3) { animation-delay: 0s; }
+
+/* أنيميشن السلة */
+.cart-item {
+    animation: slideInUp 0.4s ease;
+}
+
+.cart-item.removing {
+    animation: shake 0.5s ease, fadeOut 0.5s ease forwards;
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; transform: translateX(100px); }
+}
+
+/* أنيميشن الأزرار */
+.cta-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: 0.5s;
+}
+
+.cta-button:hover::before {
+    left: 100%;
+}
+
+/* أنيميشن responsive */
+@media (max-width: 768px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .hero-visual {
+        order: -1;
+        height: 200px;
+    }
+    
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+}

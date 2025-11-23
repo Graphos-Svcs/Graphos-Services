@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphos Services - Design & AI Solutions</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="loading-bar" id="loadingBar"></div>
+    <div class="floating-particles" id="floatingParticles"></div>
+
+    <header id="mainHeader">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-pen-fancy"></i>
+                Graphos Services
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home"><i class="fas fa-home"></i> الرئيسية</a></li>
+                    <li><a href="#services"><i class="fas fa-concierge-bell"></i> الخدمات</a></li>
+                    <li><a href="#cart"><i class="fas fa-shopping-cart"></i> السلة</a></li>
+                    <li><button class="language-switcher" id="languageSwitcher">
+                        <i class="fas fa-globe"></i> English
+                    </button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="ai-badge">
+                <i class="fas fa-robot"></i> مدعوم بالذكاء الاصطناعي المتقدم
+            </div>
+            <h1 class="hero-title">Graphos Services</h1>
+            <p class="hero-description">نقدم حلول تصميم وإبداع متكاملة باستخدام أحدث تقنيات الذكاء الاصطناعي. شعارات، فيديوهات، عروض تقديمية، ومواقع إلكترونية بجودة استثنائية.</p>
+            <div class="hero-buttons">
+                <a href="#services" class="cta-button primary">
+                    <i class="fas fa-rocket"></i> ابدأ مشروعك
+                </a>
+                <a href="#ai-assistant" class="cta-button secondary">
+                    <i class="fas fa-robot"></i> جرب المساعد AI
+                </a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="floating-shapes">
+                <div class="shape shape-1"><i class="fas fa-palette"></i></div>
+                <div class="shape shape-2"><i class="fas fa-video"></i></div>
+                <div class="shape shape-3"><i class="fas fa-code"></i></div>
+                <div class="shape shape-4"><i class="fas fa-lightbulb"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>خدماتنا المتكاملة</h2>
+                <p>نقدم مجموعة شاملة من خدمات التصميم والتطوير</p>
+            </div>
+            <div class="services-grid" id="servicesGrid"></div>
+        </div>
+    </section>
+
+    <section class="ai-showcase">
+        <div class="container">
+            <div class="ai-features">
+                <div class="ai-feature">
+                    <i class="fas fa-brain"></i>
+                    <h3>ذكاء اصطناعي متقدم</h3>
+                    <p>نستخدم أحدث نماذج الذكاء الاصطناعي لتحليل احتياجاتك وتقديم حلول مخصصة</p>
+                </div>
+                <div class="ai-feature">
+                    <i class="fas fa-bolt"></i>
+                    <h3>معالجة ذكية</h3>
+                    <p>خوارزميات ذكية تفهم متطلباتك وتقدم اقتراحات إبداعية فورية</p>
+                </div>
+                <div class="ai-feature">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>تحليل بيانات</h3>
+                    <p>نحلل اتجاهات السوق لنقدم لك حلولاً تتماشى مع أحدث المعايير</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="ai-assistant" id="ai-assistant">
+        <div class="ai-toggle" id="aiToggle">
+            <i class="fas fa-robot"></i>
+            <span class="ai-pulse"></span>
+        </div>
+        <div class="ai-chatbot" id="aiChatbot">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i class="fas fa-robot"></i>
+                    <h3>مساعد Graphos AI</h3>
+                    <span class="status online"></span>
+                </div>
+                <div class="chat-actions">
+                    <button class="chat-btn" id="clearChat"><i class="fas fa-trash"></i></button>
+                    <button class="chat-btn" id="closeChat"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">مرحباً! أنا مساعد Graphos AI. كيف يمكنني مساعدتك في مشروعك التصميمي اليوم؟</div>
+                        <div class="message-time">الآن</div>
+                    </div>
+                </div>
+            </div>
+            <div class="quick-actions" id="quickActions">
+                <button class="quick-btn" data-msg="أريد تصميم شعار">تصميم شعار</button>
+                <button class="quick-btn" data-msg="أحتاج فيديو تسويقي">فيديو تسويقي</button>
+                <button class="quick-btn" data-msg="عرض أسعار كامل">عرض أسعار</button>
+            </div>
+            <div class="chat-input-container">
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="اكتب استفسارك عن التصميم...">
+                    <button class="send-button" id="sendMessage">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="ai-suggestions" id="aiSuggestions"></div>
+            </div>
+        </div>
+    </div>
+
+    <section class="cart-section" id="cart">
+        <div class="container">
+            <div class="section-header">
+                <h2>عربة التسوق</h2>
+                <p>راجع طلباتك وأكمل عملية الشراء</p>
+            </div>
+            <div class="cart-container">
+                <div class="cart-items" id="cartItems">
+                    <div class="empty-cart" id="emptyCart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>عربة التسوق فارغة</h3>
+                        <p>لم تقم بإضافة أي خدمات بعد</p>
+                        <a href="#services" class="cta-button primary">
+                            <i class="fas fa-shopping-bag"></i> تصفح الخدمات
+                        </a>
+                    </div>
+                </div>
+                <div class="cart-summary" id="cartSummary" style="display: none;">
+                    <div class="summary-item">
+                        <span>المجموع الفرعي:</span>
+                        <span id="subtotal">0 ريال</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>الخصم:</span>
+                        <span id="discount">0 ريال</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>المجموع الكلي:</span>
+                        <span id="total">0 ريال</span>
+                    </div>
+                    <button class="checkout-button" id="checkoutButton">
+                        <i class="fas fa-lock"></i> إتمام الشراء الآمن
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <i class="fas fa-pen-fancy"></i>
+                        Graphos Services
+                    </div>
+                    <p>نقدم حلول تصميم وإبداع متكاملة باستخدام أحدث تقنيات الذكاء الاصطناعي لتحقيق رؤيتك بشكل استثنائي.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-behance"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>اتصل بنا</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> info@graphos.com</p>
+                        <p><i class="fas fa-phone"></i> +966 123 456 789</p>
+                        <p><i class="fas fa-map-marker-alt"></i> الرياض، المملكة العربية السعودية</p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>الخدمات السريعة</h3>
+                    <ul class="quick-links">
+                        <li><a href="#services">تصميم الشعارات</a></li>
+                        <li><a href="#services">تصميم الفيديوهات</a></li>
+                        <li><a href="#services">العروض التقديمية</a></li>
+                        <li><a href="#services">المواقع الإلكترونية</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Graphos Services. جميع الحقوق محفوظة.</p>
+                <p>تم التطوير باستخدام تقنيات الذكاء الاصطناعي المتقدمة</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/animations.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/ai-bot.js"></script>
+    <script src="js/cart.js"></script>
+</body>
+</html>
