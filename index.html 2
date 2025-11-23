@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graphos Services</title>
+<!-- AOS للأنيميشن -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<style>
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f6f8; color:#111; }
+header { text-align:center; padding:40px 20px; background: linear-gradient(90deg,#6a11cb,#2575fc); color:#fff; }
+header h1 { font-size:36px; margin:0; }
+header p { margin:10px 0 0 0; font-size:18px; }
+
+.language-switch { margin-top:10px; }
+.language-switch button { margin:0 5px; padding:5px 10px; cursor:pointer; border:none; border-radius:5px; }
+
+.services { display:flex; flex-wrap:wrap; justify-content:center; margin:50px 0; }
+.service-card { background:#fff; border-radius:12px; width:300px; margin:15px; padding:25px; text-align:center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.3s; }
+.service-card:hover { transform: scale(1.05); }
+.service-card h2 { font-size:22px; margin-bottom:10px; color:#2575fc; }
+.service-card p { font-size:16px; margin:5px 0; }
+
+footer { text-align:center; padding:20px; background:#111; color:#fff; margin-top:50px; }
+
+.price { font-weight:bold; margin-top:10px; color:#ff416c; }
+.note { font-size:14px; color:#555; margin-top:5px; }
+.payment { background:#e0e7ff; padding:15px; border-radius:8px; margin-top:15px; text-align:left; }
+
+</style>
+</head>
+<body>
+
+<header data-aos="fade-down">
+<h1>Graphos Services</h1>
+<p>تصميم شعارات • فيديوهات • عروض • عرض شامل • ترجمة • أفكار مشاريع • مواقع</p>
+
+<div class="language-switch">
+<button onclick="setLanguage('ar')">عربي</button>
+<button onclick="setLanguage('en')">English</button>
+</div>
+</header>
+
+<section class="services">
+
+<!-- 1) لوجوهات -->
+<div class="service-card" data-aos="fade-up">
+<h2>1) تصميم لوجوهات</h2>
+<p>الوقت والتكلفة:</p>
+<p class="price">4 أيام → 15 ريال<br>3 أيام → 20 ريال<br>يومين → 25 ريال<br>يوم → 30 ريال<br>نفس اليوم (6-7 ساعات) → 40 ريال</p>
+<p class="note">⚠️ الأسعار قابلة للتفاوض</p>
+<div class="payment">
+<b>سياسة الدفع:</b> قبل الاستلام، عبر بطاقة الدفع الخاصة بنا.
+</div>
+</div>
+
+<!-- 2) فيديوهات -->
+<div class="service-card" data-aos="fade-up" data-aos-delay="100">
+<h2>2) تصميم فيديوهات</h2>
+<p>مدة الفيديو والتكلفة:</p>
+<p class="price">30 ثانية → 20 ريال<br>60 ثانية → 30 ريال<br>90 ثانية → 40 ريال<br>120 ثانية → 50 ريال</p>
+<p class="note">⚠️ الأسعار قابلة للتفاوض</p>
+<div class="payment">
+<b>سياسة الدفع:</b> قبل الاستلام، عبر بطاقة الدفع الخاصة بنا.
+</div>
+</div>
+
+<!-- 3) عروض باوربوينت -->
+<div class="service-card" data-aos="fade-up" data-aos-delay="200">
+<h2>3) عروض تقديمية</h2>
+<p>السعر لكل شريحة: 4 ريال (الحد الأدنى 5 شرائح)</p>
+<p class="note">⚠️ الأسعار قابلة للتفاوض</p>
+<div class="payment">
+<b>سياسة الدفع:</b> قبل الاستلام، عبر بطاقة الدفع الخاصة بنا.
+</div>
+</div>
+
+<!-- 4) عرض شامل -->
+<div class="service-card" data-aos="fade-up" data-aos-delay="300">
+<h2>4) عرض شامل متكامل</h2>
+<p>القسم الأول: 10 سلايدات + مقطع ≤1 دقيقة + لوجو → 65 ريال</p>
+<p>القسم الثاني: 20 سلايد + مقطع ≤2 دقيقة + لوجو → 115 ريال</p>
+<p class="note">⚠️ الأسعار قابلة للتفاوض</p>
+<div class="payment">
+<b>سياسة الدفع:</b> قبل الاستلام، عبر بطاقة الدفع الخاصة بنا.
+</div>
+</div>
+
+<!-- 5) أفكار مشاريع -->
+<div class="service-card" data-aos="fade-up" data-aos-delay="400">
+<h2>5) أفكار مشاريع</h2>
+<p class="price">20 ريال</p>
+<p class="note">⚠️ الأسعار قابلة للتفاوض</p>
+<div class="payment">
+<b>سياسة الدفع:</b> قبل الاستلام، عبر بطاقة الدفع الخاصة بنا.
+</div>
+</div>
+
+<!-- 6) ترجمة -->
+<div class="service-card" data-aos="fade-up" data-aos-delay="500">
+<h2>6) ترجمة</h2>
+<p class="price">كل نص دقيقة → 15 ريال</p>
+<p class="note">⚠️ الأسعار قابلة للتفاوض</p>
+<div class="payment">
+<b>سياسة الدفع:</b> قبل الاستلام، عبر بطاقة الدفع الخاصة بنا.
+</div>
+</div>
+
+<!-- 7) تصميم مواقع -->
+<div class="service-card" data-aos="fade-up" data-aos-delay="600">
+<h2>7) تصميم مواقع</h2>
+<p class="price">1500 ريال (بدل 2000 ريال)</p>
+<p class="note">⚠️ الأسعار قابلة للتفاوض</p>
+<div class="payment">
+<b>سياسة الدفع:</b> قبل الاستلام، عبر بطاقة الدفع الخاصة بنا.
+</div>
+</div>
+
+</section>
+
+<footer data-aos="fade-up">
+<p>© 2025 Graphos Services - جميع الحقوق محفوظة</p>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 800, once:true });
+
+function setLanguage(lang){
+  if(lang==='en'){
+    document.documentElement.lang='en';
+    document.body.dir='ltr';
+    alert('English version coming soon!');
+  } else {
+    document.documentElement.lang='ar';
+    document.body.dir='rtl';
+  }
+}
+</script>
+
+</body>
+</html>
