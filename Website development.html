@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Graphos Services — Graphos OS</title>
+<meta name="description" content="Graphos Services - متجر خدمات رقمية متكامل: تصميم، فيديو، عروض، ترجمة، أفكار مشاريع، مواقع — واجهة Graphos OS المتقدمة"/>
+
+<!-- AOS for scroll animations -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+<!-- Lottie -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+<style>
+/* ===========================
+   GRAPHOS OS — single-file UI
+   Dark × Gold aesthetic
+   =========================== */
+
+:root{
+  --bg0:#040404; --bg1:#0b0b0b; --panel:#0f0f10;
+  --muted:#cfcfcf; --gold:#d4af37; --gold-weak:#ffdca3;
+  --glass: rgba(255,255,255,0.02);
+  --accent:#ffd166;
+  --success:#4caf50; --danger:#ff6b6b;
+  font-family: "Inter", "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%; margin:0; background: radial-gradient(1200px 600px at 10% 10%, rgba(212,175,55,0.06), transparent), linear-gradient(180deg,var(--bg0),#050505 50%); color:#fff; -webkit-font-smoothing:antialiased}
+a{color:var(--accent); text-decoration:none}
+.container{max-width:1300px;margin:0 auto;padding:12px}
+
+/* Top bar */
+.topbar{
+  height:64px; display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px; background: linear-gradient(90deg, rgba(0,0,0,0.6), rgba(10,10,10,0.4));
+  border-bottom:1px solid rgba(212,175,55,0.08); position:sticky; top:0; z-index:9999;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,#111,#000);display:flex;align-items:center;justify-content:center;
+  font-weight:900;color:var(--gold);font-size:20px;box-shadow:0 8px 30px rgba(0,0,0,0.6)
+}
+.brand h1{margin:0;font-size:16px;color:var(--gold)}
+.brand p{margin:0;font-size:12px;color:var(--muted)}
+
+/* desktop area */
+.desktop{
+  height:calc(100vh - 64px); padding:18px; position:relative; overflow:hidden;
+  background-image: linear-gradient(180deg, rgba(212,175,55,0.02), transparent 30%);
+}
+
+/* wallpaper subtle */
+.wallpaper{
+  position:absolute; inset:0; opacity:0.06; background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=8a6b5d1b4a6f6a1a4b2b3c8d9e0f1a2b') center/cover no-repeat; filter:blur(6px);
+  transform: scale(1.08);
+}
+
+/* dock / quick actions */
+.dock{
+  position: absolute; right:24px; top:90px; display:flex;flex-direction:column; gap:10px; z-index:40;
+}
+.icon-btn{width:68px;height:68px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.05));display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 22px rgba(0,0,0,0.6)}
+.icon-btn:hover{transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.6)}
+
+/* widgets on desktop */
+.widget-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;z-index:1;position:relative}
+.widget{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.03);
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+}
+
+/* open-window styles */
+.win{
+  position:absolute; width:760px; max-width:95%; min-height:140px; background:var(--panel); border-radius:12px; border:1px solid rgba(255,255,255,0.04);
+  box-shadow:0 18px 60px rgba(0,0,0,0.8); overflow:hidden;
+}
+.win .titlebar{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:linear-gradient(90deg, rgba(0,0,0,0.25), rgba(255,255,255,0.02)); border-bottom:1px solid rgba(255,255,255,0.02)}
+.win .titlebar .title{font-weight:700;color:var(--gold)}
+.win .titlebar .controls{display:flex;gap:8px}
+.ctrl{width:34px;height:32px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.ctrl.close{background:linear-gradient(180deg,#2b0000,#1a0000); color:#fff}
+.ctrl.min{background:rgba(255,255,255,0.02)}
+.ctrl.max{background:rgba(255,255,255,0.02)}
+
+/* content inside window */
+.win .content{padding:12px; max-height:70vh; overflow:auto}
+.small{color:var(--muted); font-size:13px}
+
+/* service list */
+.service-row{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:8px;background:rgba(255,255,255,0.01); margin-bottom:10px}
+.service-row .left{display:flex;align-items:center;gap:12px}
+.price{font-weight:800;color:var(--gold)}
+
+/* checkout layout */
+.form-grid{display:grid;grid-template-columns:1fr 320px;gap:12px}
+@media(max-width:900px){.form-grid{grid-template-columns:1fr}}
+
+/* cart item */
+.cart-item{display:flex;justify-content:space-between;gap:12px;padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;margin-bottom:8px}
+
+/* footer */
+.footer{position:absolute;left:18px;bottom:18px; font-size:13px; color:var(--muted)}
+
+/* notifications */
+.toast{position:fixed;left:18px;top:90px;background:rgba(20,20,20,0.9);padding:10px 12px;border-radius:8px;border-left:4px solid var(--gold);box-shadow:0 10px 30px rgba(0,0,0,0.6);z-index:9999}
+
+/* small helpers */
+.btn{background:var(--gold);color:#111;border:none;padding:8px 12px;border-radius:8px;font-weight:800;cursor:pointer}
+.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+.link{color:var(--gold);cursor:pointer;text-decoration:underline}
+
+/* animation helpers */
+.pulse{animation:pulse 2s infinite}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+/* language small */
+.lang-switch{display:flex;gap:8px;align-items:center}
+.lang-switch button{background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--muted);padding:6px;border-radius:6px;cursor:pointer}
+
+/* draggable cursor */
+.draggable{cursor:grab}
+.draggable:active{cursor:grabbing}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">G</div>
+    <div>
+      <h1>Graphos Services</h1>
+      <p class="small">تصميم - فيديو - عروض - ترجمة - أفكار مشاريع - مواقع</p>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="lang-switch" title="Switch language">
+      <button onclick="setLang('ar')" class="ghost">عربي</button>
+      <button onclick="setLang('en')" class="ghost">EN</button>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn" onclick="openWin('Services')">افتح الخدمات</button>
+      <button class="ghost" onclick="openWin('Cart')">السلة (<span id="cartCount">0</span>)</button>
+    </div>
+  </div>
+</div>
+
+<!-- DESKTOP AREA -->
+<div class="desktop">
+  <div class="wallpaper"></div>
+
+  <div class="container">
+    <!-- widgets -->
+    <div class="widget-grid">
+      <div class="widget" data-aos="fade-up">
+        <h3 class="small">مرحباً بك في Graphos OS</h3>
+        <p class="small">واجهة تحكم احترافية لعرض خدماتك وبيعها — مصمم لتجربة جذابة وسريعة.</p>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="btn" onclick="openWin('Services')">تصفح الخدمات</button>
+          <button class="ghost" onclick="openWin('Cart')">فتح السلة</button>
+        </div>
+      </div>
+
+      <div class="widget" data-aos="fade-up">
+        <h3 class="small">AI Assistant (Offline Prototype)</h3>
+        <p class="small">اكتب وصف الخدمة وسأقترح وصفًا احترافيًا تلقائيًا.</p>
+        <input id="miniAiInput" placeholder="اكتب وصف سريع..." style="width:100%; padding:8px; margin-top:8px; border-radius:8px; background:#0e0e0e; border:1px solid rgba(255,255,255,0.03); color:#fff">
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" onclick="miniAISuggest()">اقترح</button>
+          <button class="ghost" onclick="copyMiniAI()">نسخ</button>
+        </div>
+        <div id="miniAiResult" class="small" style="margin-top:8px;color:var(--muted)"></div>
+      </div>
+
+      <div class="widget" data-aos="fade-up">
+        <h3 class="small">المعرض</h3>
+        <p class="small">أضف أعمالك لاحقاً داخل assets أو استخدم صور افتراضية.</p>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="ghost" onclick="openWin('Gallery')">افتح المعرض</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dock icons -->
+  <div class="dock" aria-hidden="false">
+    <div class="icon-btn" title="Services" onclick="openWin('Services')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.2"/></svg></div>
+    <div class="icon-btn" title="AI Assistant" onclick="openWin('AI')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="1.2"/></svg></div>
+    <div class="icon-btn" title="Cart" onclick="openWin('Cart')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 6h15l-1.5 9h-11z" stroke="currentColor" stroke-width="1.2"/></svg></div>
+    <div class="icon-btn" title="Gallery" onclick="openWin('Gallery')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.2"/></svg></div>
+  </div>
+
+  <!-- footer small -->
+  <div class="footer">© 2025 Graphos Services — Graphos OS</div>
+
+  <!-- TOAST placeholder -->
+  <div id="toastArea" style="position:fixed; right:18px; top:90px; z-index:9999"></div>
+
+  <!-- WINDOWS (created/hidden by JS) -->
+</div>
+
+<!-- AOS -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+<script>
+AOS.init({duration:700, once:true});
+
+// ========= State & Utilities =========
+const STATE = {
+  windows: {}, // holds references
+  zIndex: 100,
+  services: [
+    {id:'logo', title:'تصميم لوجو', prices:[{label:'4 أيام',price:15},{label:'3 أيام',price:20},{label:'يومين',price:25},{label:'يوم',price:30},{label:'نفس اليوم (6-7 ساعات)',price:40}]},
+    {id:'video', title:'تصميم فيديو', prices:[{label:'30s',price:20},{label:'60s',price:30},{label:'90s',price:40},{label:'120s',price:50}]},
+    {id:'slides', title:'عروض تقديمية', prices:[{label:'سعر الشريحة',price:4, note:'الحد الأدنى 5 شرائح'}]},
+    {id:'full', title:'عرض شامل', prices:[{label:'ق1 (10 سلايد+فيديو≤1+لوجو)',price:65},{label:'ق2 (20 سلايد+فيديو≤2+لوجو)',price:115}]},
+    {id:'ideas', title:'أفكار مشاريع', prices:[{label:'سعر الفكرة',price:20}]},
+    {id:'translate', title:'ترجمة', prices:[{label:'لكل دقيقة',price:15}]},
+    {id:'website', title:'تصميم موقع', prices:[{label:'سعر ثابت (عرض)',price:1500}]}
+  ]
+}
+
+// ======= localStorage cart helpers =======
+function loadCart(){ try{ return JSON.parse(localStorage.getItem('graphos_cart')||'[]') }catch(e){return []}}
+function saveCart(c){ localStorage.setItem('graphos_cart', JSON.stringify(c)); updateCartCount(); }
+function addToCart(item){ const c = loadCart(); c.push(item); saveCart(c); showToast('تمت الإضافة للسلة: ' + item.title); }
+function clearCart(){ localStorage.removeItem('graphos_cart'); updateCartCount(); showToast('تم مسح السلة'); }
+function removeFromCart(index){ const c = loadCart(); c.splice(index,1); saveCart(c); renderCartWindow(); showToast('حُذِف عنصر من السلة'); }
+function updateCartCount(){ document.getElementById('cartCount').textContent = loadCart().length }
+
+// ========== Toast ===========
+function showToast(text, timeout=2500){
+  const area = document.getElementById('toastArea');
+  const el = document.createElement('div'); el.className='toast'; el.innerText = text; area.appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; setTimeout(()=>el.remove(),400)}, timeout);
+}
+
+// ========= Window management ===========
+function openWin(name){
+  if(STATE.windows[name]) { bringToFront(STATE.windows[name].el); return; }
+  let el;
+  if(name==='Services') el = createServicesWindow();
+  if(name==='Cart') el = createCartWindow();
+  if(name==='AI') el = createAIWindow();
+  if(name==='Gallery') el = createGalleryWindow();
+  if(name==='QuickOrder') el = createQuickOrderWindow();
+  if(!el) return;
+  document.body.appendChild(el);
+  STATE.windows[name] = {el, name};
+  bringToFront(el);
+}
+
+function bringToFront(el){
+  STATE.zIndex += 1; el.style.zIndex = STATE.zIndex;
+  // focus
+  el.querySelector('.content')?.focus();
+}
+
+function closeWin(nameOrEl){
+  let key = (typeof nameOrEl === 'string') ? nameOrEl : Object.keys(STATE.windows).find(k=>STATE.windows[k].el===nameOrEl);
+  if(!key) return;
+  const w = STATE.windows[key];
+  w.el.remove();
+  delete STATE.windows[key];
+}
+
+// ========== Draggable helper ==========
+function makeDraggable(win){
+  const title = win.querySelector('.titlebar');
+  title.classList.add('draggable');
+  let offsetX=0, offsetY=0, dragging=false;
+  title.addEventListener('pointerdown', (e)=>{
+    dragging=true; title.setPointerCapture(e.pointerId);
+    const rect = win.getBoundingClientRect();
+    offsetX = e.clientX - rect.left; offsetY = e.clientY - rect.top;
+    bringToFront(win);
+  });
+  title.addEventListener('pointermove', (e)=>{ if(!dragging) return; win.style.left = (e.clientX - offsetX) + 'px'; win.style.top = (e.clientY - offsetY) + 'px'; });
+  title.addEventListener('pointerup', (e)=>{ dragging=false; title.releasePointerCapture(e.pointerId); });
+}
+
+// ========== Create windows ===========
+function createWindowStructure(title){
+  const win = document.createElement('div'); win.className='win'; win.style.left='80px'; win.style.top='120px';
+  const tb = document.createElement('div'); tb.className='titlebar';
+  tb.innerHTML = `<div class="title">${title}</div><div class="controls"><div class="ctrl min" title="Minimize">—</div><div class="ctrl max" title="Maximize">□</div><div class="ctrl close" title="Close">×</div></div>`;
+  const content = document.createElement('div'); content.className='content';
+  win.appendChild(tb); win.appendChild(content);
+
+  // controls events
+  tb.querySelector('.close').addEventListener('click', ()=>{ win.remove(); // cleanup in STATE
+    const key = Object.keys(STATE.windows).find(k=>STATE.windows[k].el===win); if(key) delete STATE.windows[key]; });
+  tb.querySelector('.min').addEventListener('click', ()=>{ win.style.display='none'; setTimeout(()=>win.style.display='block',200) });
+  tb.querySelector('.max').addEventListener('click', ()=>{ if(win.dataset.maxed!=='1'){ win.dataset.prevLeft=win.style.left; win.dataset.prevTop=win.style.top; win.dataset.prevWidth=win.style.width; win.dataset.prevHeight=win.style.height; win.style.left='20px'; win.style.top='80px'; win.style.width='calc(100% - 80px)'; win.dataset.maxed='1'; } else { win.style.left=win.dataset.prevLeft; win.style.top=win.dataset.prevTop; win.style.width=win.dataset.prevWidth; win.dataset.maxed='0'; } });
+  makeDraggable(win);
+  return {win, content, tb};
+}
+
+// -------- Services window --------
+function createServicesWindow(){
+  const {win, content} = createWindowStructure('الخدمات — Services');
+  content.innerHTML = `<div style="display:flex;gap:12px;flex-direction:column">
+    <div class="small">اختر أي خدمة ثم اختر خيار السعر لإضافتها للسلة</div>
+    ${STATE.services.map(s=>{
+      // build price buttons
+      const prs = s.prices.map(p=>`<button class="btn" onclick="addToCart({id:'${s.id}', title:'${s.title} - ${p.label}', price:${p.price}})">${p.label} • ${p.price} ر.س</button>`).join(' ');
+      const note = (s.prices[0].note) ? `<div class="small">${s.prices[0].note}</div>` : '';
+      return `<div class="service-row" style="flex-direction:column;align-items:flex-start">
+        <div style="display:flex;justify-content:space-between;width:100%">
+          <div class="left"><div><strong>${s.title}</strong><div class="small">${note}</div></div></div>
+          <div class="price small">${s.prices[0].price} ر.س بداية</div>
+        </div>
+        <div style="margin-top:8px">${prs}</div>
+      </div>`;
+    }).join('')}
+    <div style="display:flex;gap:8px;margin-top:6px">
+      <button class="ghost" onclick="openWin('Cart')">فتح السلة</button>
+      <button class="ghost" onclick="openWin('QuickOrder')">طلب سريع</button>
+    </div>
+  </div>`;
+  document.body.appendChild(win); return win;
+}
+
+// -------- Cart window --------
+function createCartWindow(){
+  const {win, content} = createWindowStructure('سلة المشتريات — Cart');
+  content.innerHTML = `<div id="cartWinContent"><div class="small">تحميل السلة...</div></div>`;
+  document.body.appendChild(win); renderCartWindow(); return win;
+}
+function renderCartWindow(){
+  const win = Object.values(STATE.windows).find(w=>w.name==='Cart')?.el;
+  if(!win) return;
+  const content = win.querySelector('.content');
+  const cart = loadCart();
+  if(cart.length===0){ content.innerHTML = '<div class="small">السلة فارغة — أضف خدمات من نافذة الخدمات.</div>'; updateCartCount(); return; }
+  let total = cart.reduce((s,i)=>s+Number(i.price),0);
+  content.innerHTML = `<div style="display:flex;gap:12px"><div style="flex:1">
+    ${cart.map((it,idx)=>`<div class="cart-item"><div><strong>${it.title}</strong><div class="small">${it.price} ر.س</div></div>
+      <div><button class="ghost" onclick="removeFromCart(${idx})">حذف</button></div></div>`).join('')}
+    <div style="margin-top:8px" class="small">المجموع: <strong class="price">${total} ر.س</strong></div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn" onclick="openCheckout()">الدفع الآن</button>
+      <button class="ghost" onclick="clearCart()">مسح السلة</button>
+    </div>
+  </div>
+  <div style="width:320px;padding-left:12px;border-left:1px solid rgba(255,255,255,0.03)">
+    <div class="small">ملاحظات الطلب</div>
+    <textarea id="cartNotes" style="width:100%;height:140px;margin-top:8px;background:#0e0e0e;border-radius:8px;border:1px solid rgba(255,255,255,0.03);color:#fff"></textarea>
+    <div style="margin-top:8px" class="small">عند الضغط على (الدفع الآن) سيتم إنشاء طلب وإرساله إلى بريدك تلقائياً أو فتح واتساب لإرسال الطلب.</div>
+  </div></div>`;
+  updateCartCount();
+}
+
+// ----- Quick Order window -----
+function createQuickOrderWindow(){
+  const {win, content} = createWindowStructure('طلب سريع — Quick Order');
+  content.innerHTML = `<div>
+    <div class="small">املأ بياناتك وسيتم إرسال رسالة طلب جاهزة للبريد أو واتساب</div>
+    <div style="margin-top:8px"><input id="qName" placeholder="اسمك" style="width:100%;padding:8px;border-radius:8px;background:#0e0e0e;border:1px solid rgba(255,255,255,0.03);color:#fff"></div>
+    <div style="margin-top:8px"><input id="qPhone" placeholder="رقم الجوال (9665...)" style="width:100%;padding:8px;border-radius:8px;background:#0e0e0e;border:1px solid rgba(255,255,255,0.03);color:#fff"></div>
+    <div style="margin-top:8px"><input id="qService" placeholder="مثلاً: لوجو - 3 أيام" style="width:100%;padding:8px;border-radius:8px;background:#0e0e0e;border:1px solid rgba(255,255,255,0.03);color:#fff"></div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn" onclick="sendQuickOrder()">إنشاء وإرسال</button>
+      <button class="ghost" onclick="closeWin('QuickOrder')">إلغاء</button>
+    </div>
+  </div>`;
+  document.body.appendChild(win); return win;
+}
+function sendQuickOrder(){
+  const name = document.getElementById('qName').value.trim();
+  const phone = document.getElementById('qPhone').value.trim();
+  const service = document.getElementById('qService').value.trim();
+  if(!name || !phone || !service){ showToast('أكمل الحقول المطلوبة'); return; }
+  // create mailto
+  const to = 'Graphos.svcs@gmail.com';
+  const subject = encodeURIComponent('طلب سريع من الموقع');
+  const body = encodeURIComponent(`الاسم: ${name}\nالجوال: ${phone}\nالخدمة: ${service}\n\n(تم الإرسال من Graphos OS)`);
+  window.open(`mailto:${to}?subject=${subject}&body=${body}`, '_blank');
+  showToast('تم إنشاء رسالة الطلب وفتح تطبيق البريد');
+}
+
+// ------ AI Window (client-side prototype) -------
+function createAIWindow(){
+  const {win, content} = createWindowStructure('مساعد الذكاء الاصطناعي — AI');
+  content.innerHTML = `<div>
+    <div class="small">مساعد AI تجريبي يعمل داخل المتصفح (اقتراح وصف/عنوان/مخرجات)</div>
+    <input id="aiInputFull" placeholder="اكتب وصف المطلب أو اطلب مساعدة" style="width:100%;padding:8px;margin-top:8px;border-radius:8px;background:#0e0e0e;border:1px solid rgba(255,255,255,0.03);color:#fff">
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn" onclick="aiGenerateFull()">اقتراح احترافي</button>
+      <button class="ghost" onclick="copyAIOutput()">نسخ</button>
+    </div>
+    <div id="aiOutFull" style="margin-top:12px;background:linear-gradient(90deg, rgba(212,175,55,0.04), rgba(212,175,55,0.01));padding:10px;border-radius:8px;color:#fff"></div>
+    <div style="margin-top:12px" class="small">ملاحظة: لتكامل API خارجي (OpenAI مثلاً) يمكن ربطه لاحقاً بإرشادي.</div>
+  </div>`;
+  document.body.appendChild(win); return win;
+}
+function aiGenerateFull(){
+  const q = document.getElementById('aiInputFull').value.trim();
+  const out = document.getElementById('aiOutFull');
+  if(!q){ out.innerText='اكتب طلبك أولاً'; return; }
+  // simple template-based generator (local)
+  const templates = [
+    `وصف احترافي: ${q}. التصميم سيكون بسيطاً وحديثاً مع تركيز على الشعار ووضوح الهوية. التسليم: ملفات PNG, SVG ونسخة أوراق هوية للعلامة.`,
+    `خطة تنفيذ: بحث هوية → تصميم 3 مقترحات → مراجعتان → تسليم الملفات المصدرية. زمن التسليم المتوقع 3 أيام قابلة للتعديل.`,
+    `مخرجات متوقعة: شعار عالي الدقة، دليل ألوان مختصر، ملف SVG وملفات جاهزة للطباعة والويب.`
+  ];
+  out.innerHTML = templates.join('<br/><br/>');
+}
+
+// copy helpers
+function copyAIOutput(){ const t = document.getElementById('aiOutFull').innerText; navigator.clipboard.writeText(t).then(()=> showToast('تم نسخ النص')); }
+function miniAISuggest(){ const q = document.getElementById('miniAiInput').value.trim(); if(!q){ showToast('اكتب وصفاً صغيراً'); return; } document.getElementById('miniAiResult').innerText = 'اقتراح: ' + q + ' — تصميم عصري وبسيط، ألوان متناسقة، ملفات PNG وSVG.'; showToast('تم اقتراح وصف سريع'); }
+function copyMiniAI(){ navigator.clipboard.writeText(document.getElementById('miniAiResult').innerText || '').then(()=> showToast('تم النسخ')) }
+
+// ======= Gallery window =======
+function createGalleryWindow(){
+  const {win, content} = createWindowStructure('المعرض — Gallery');
+  // sample placeholders (user will replace with assets)
+  content.innerHTML = `<div><div class="small">عرض أعمالك هنا. استبدل الصور داخل مجلد assets ثم حدث الروابط.</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px">
+      ${[1,2,3,4,5,6].map(i=>`<div style="background:#0e0e0e;height:110px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted)">عمل ${i}</div>`).join('')}
+    </div>
+  </div>`;
+  document.body.appendChild(win); return win;
+}
+
+// ========= Checkout flow =========
+function openCheckout(){
+  // open new window for checkout
+  const {win, content} = createWindowStructure('الدفع — Checkout');
+  const cart = loadCart();
+  if(cart.length===0){ content.innerHTML = '<div class="small">السلة فارغة.</div>'; document.body.appendChild(win); return win; }
+  const total = cart.reduce((s,i)=>s+Number(i.price),0);
+  content.innerHTML = `<div class="form-grid"><div>
+      <div class="small">تفاصيل الطلب</div>
+      ${cart.map((it,idx)=>`<div class="cart-item"><div>${it.title}</div><div class="small">${it.price} ر.س</div></div>`).join('')}
+      <div style="margin-top:8px" class="small">المجموع: <strong>${total} ر.س</strong></div>
+      <div style="margin-top:12px"><textarea id="checkoutNotes" placeholder="ملاحظات الطلب..." style="width:100%;height:100px;background:#0e0e0e;border-radius:8px;border:1px solid rgba(255,255,255,0.03);color:#fff"></textarea></div>
+    </div>
+    <div>
+      <div class="small">بيانات المشتري</div>
+      <input id="cName" placeholder="الاسم الكامل">
+      <input id="cPhone" placeholder="الجوال (مثال: 9665...)">
+      <div style="margin-top:8px" class="small">طريقة الدفع (مسبقاً): سنقوم بإرسال تفاصيل الدفع بعد التأكيد</div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn" onclick="submitCheckout()">انشاء طلب (إيميل/واتساب)</button>
+        <button class="ghost" onclick="closeWin('Checkout')">إلغاء</button>
+      </div>
+    </div></div>`;
+  document.body.appendChild(win); return win;
+}
+
+function submitCheckout(){
+  const cart = loadCart();
+  const name = document.getElementById('cName').value.trim();
+  const phone = document.getElementById('cPhone').value.trim();
+  const notes = document.getElementById('checkoutNotes').value.trim();
+  if(!name || !phone){ showToast('أدخل الاسم ورقم الجوال'); return; }
+  const total = cart.reduce((s,i)=>s+Number(i.price),0);
+  // build message
+  let body = `طلب جديد من الموقع\nالاسم: ${name}\nالجوال: ${phone}\n\nالمطلوبات:\n`;
+  cart.forEach(it=> body += `- ${it.title} : ${it.price} ر.س\n`);
+  body += `\nالمجموع: ${total} ر.س\nملاحظات: ${notes}\n\n(تم الإنشاء عبر Graphos OS)`;
+  // 1) open mailto
+  const mailTo = `mailto:Graphos.svcs@gmail.com?subject=${encodeURIComponent('طلب جديد من الموقع')}&body=${encodeURIComponent(body)}`;
+  // 2) open whatsapp as fallback
+  const waNumber = '9665XXXXXXXX'; // <--- ضع رقمك هنا الدولي بدون +  (مثال 9665...)
+  const waMsg = encodeURIComponent(body);
+  const waUrl = `https://wa.me/${waNumber}?text=${waMsg}`;
+  // open mail and whatsapp in new tabs
+  window.open(mailTo, '_blank');
+  window.open(waUrl, '_blank');
+  showToast('تم إنشاء الطلب - تم فتح البريد وواتساب لإرسال التأكيد');
+  // don't clear cart automatically — keep until تأكيدك
+}
+
+// ======= Render initial state =======
+updateCartCount();
+showToast('Graphos OS جاهز! افتح نافذة الخدمات لتبدأ', 2500);
+
+// ========== Mini AI & copy ==========
+function copyMiniAI(){ const t = document.getElementById('miniAiResult').innerText; if(t) navigator.clipboard.writeText(t).then(()=> showToast('تم النسخ')); }
+
+// ========== Language switch ==========
+function setLang(l){
+  if(l==='en'){
+    // simple replacement (partial) — English/full i18n can be added
+    document.querySelector('.brand h1').innerText='Graphos Services';
+    document.querySelector('.brand p').innerText='Design - Video - Presentations - Translation - Projects - Websites';
+    showToast('النسخة الإنجليزية جاهزة قريبا — جزء منها مفعّل الآن');
+  } else {
+    document.querySelector('.brand h1').innerText='Graphos Services';
+    document.querySelector('.brand p').innerText='تصميم - فيديو - عروض - ترجمة - أفكار مشاريع - مواقع';
+    showToast('تم التحويل للعربية');
+  }
+}
+
+// ========== Mini helpers ==========
+function showToast(text, timeout=2200){
+  const area = document.getElementById('toastArea') || (()=>{ const a = document.createElement('div'); a.id='toastArea'; document.body.appendChild(a); return a; })();
+  const el = document.createElement('div'); el.className='toast'; el.style.opacity='1'; el.innerText = text; area.appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; setTimeout(()=>el.remove(),400); }, timeout);
+}
+
+// ========== Quick add from outside (useful) ==========
+function quickAdd(id, label, price){ addToCart({id, title:label, price}); }
+
+// ======= MINI AI helper (widget) =======
+function miniAISuggest(){
+  const v = document.getElementById('miniAiInput').value.trim();
+  if(!v){ showToast('اكتب وصفًا قصيرًا'); return; }
+  document.getElementById('miniAiResult').innerText = `اقتراح: تصميم عصري لـ "${v}" — تسليم ملفات PNG, SVG، دليل ألوان مختصر.`;
+}
+
+// small handler to create Services window on first open automatically
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'F1') { e.preventDefault(); openWin('Services'); }
+});
+
+// Expose a few functions to global (for inline buttons)
+window.addToCart = addToCart;
+window.openWin = openWin;
+window.openCheckout = openCheckout;
+window.showToast = showToast;
+window.miniAISuggest = miniAISuggest;
+window.copyMiniAI = copyMiniAI;
+
+// Accessibility: trap focus? minimal
+
+</script>
+</body>
+</html>
