@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Graphos Services — GraphosFRSVCS</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+:root{
+  --gold:#f1c766;
+  --bg:#000;
+  --card:#0f0f0f;
+  --muted:#9a9a9a;
+  --accent:#f1c766;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter, "Poppins",sans-serif;background:var(--bg);color:var(--gold);-webkit-font-smoothing:antialiased}
+header{display:flex;align-items:center;gap:14px;justify-content:center;background:linear-gradient(90deg,#000,#111);padding:16px;position:relative}
+#site-logo{height:56px;width:56px;border-radius:10px;cursor:pointer;object-fit:cover;border:2px solid rgba(241,199,102,0.12)}
+.brand{font-weight:800;font-size:20px}
+nav{display:flex;gap:18px;justify-content:center;padding:12px;background:#0b0b0b}
+nav a{color:var(--gold);text-decoration:none;font-weight:600}
+.hero{padding:56px 18px;text-align:center;font-size:24px;font-weight:700;color:var(--gold)}
+.section{background:var(--card);margin:18px;border-radius:14px;padding:22px;box-shadow:0 8px 40px rgba(0,0,0,0.6)}
+h2{color:var(--gold);text-align:center;margin:6px 0 18px}
+.service-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:#121212;padding:14px;border-radius:12px;text-align:center;transition:transform .25s,box-shadow .25s;border:1px solid rgba(241,199,102,0.05)}
+.card:hover{transform:translateY(-8px);box-shadow:0 12px 40px rgba(241,199,102,0.06)}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:12px}
+.card h3{margin:6px 0;color:#fff}
+.price-box{background:#0b0b0b;padding:10px;border-radius:10px;color:#fff;margin-top:8px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;justify-content:center}
+.btn{background:var(--gold);color:#000;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+.small{font-size:13px;color:var(--muted)}
+.cart{max-width:880px;margin:0 auto}
+.input,select,textarea{display:block;width:100%;padding:10px;border-radius:10px;border:none;background:#0b0b0b;color:#fff;margin-top:8px}
+.chat-toggle{position:fixed;left:18px;bottom:18px;background:#111;padding:12px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.6);cursor:pointer;z-index:2000;border:1px solid rgba(241,199,102,0.08)}
+.chat-window{position:fixed;right:18px;bottom:18px;width:440px;height:560px;background:#0e0e0e;border-radius:12px;box-shadow:0 20px 80px rgba(0,0,0,0.6);display:none;flex-direction:column;overflow:hidden;z-index:2100}
+.chat-header{background:#121212;padding:12px;color:var(--gold);font-weight:800;text-align:center}
+.chat-messages{flex:1;padding:12px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.msg.bot{align-self:flex-start;background:#121212;padding:10px;border-radius:10px;color:#fff;max-width:78%;animation:fadeIn .22s}
+.msg.user{align-self:flex-end;background:var(--gold);padding:10px;border-radius:10px;color:#000;max-width:78%;font-weight:700}
+.chat-input{display:flex;border-top:1px solid rgba(255,255,255,0.03)}
+.chat-input input{flex:1;padding:10px;border:none;background:transparent;color:#fff;padding-left:12px}
+.quick-buttons{display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:transparent}
+.quick-buttons button{flex:1;padding:8px;border-radius:8px;background:#121212;color:var(--gold);border:1px solid rgba(241,199,102,0.06);cursor:pointer}
+.admin-panel{position:fixed;top:100px;right:18px;width:340px;background:#0b0b0b;padding:14px;border-radius:12px;box-shadow:0 10px 50px rgba(0,0,0,0.6);display:none;z-index:2200}
+.admin-panel h3{color:var(--gold);margin:6px 0 12px}
+.admin-row{display:flex;gap:8px;margin-top:8px}
+.footer{text-align:center;padding:18px;color:#9a9a9a}
+.small-muted{color:var(--muted);font-size:13px}
+.hidden{display:none}
+.typing{display:flex;gap:6px;align-items:center}
+.dot{width:6px;height:6px;border-radius:50%;background:#888;opacity:0.7;animation:bounce 1s infinite}
+.dot:nth-child(2){animation-delay:.12s}.dot:nth-child(3){animation-delay:.24s}
+@keyframes bounce{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(max-width:880px){.chat-window{width:94%;right:3%;bottom:10px;height:60vh}.admin-panel{width:92%;right:4%;top:60px}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <img id="site-logo" src="" alt="Graphos Logo" title="انقر مرتين لفتح لوحة الإدارة (Admin)" />
+  <div class="brand">Graphos Services</div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" id="nav-home">الرئيسية</a>
+  <a href="#services" id="nav-services">الخدمات</a>
+  <a href="#payment" id="nav-payment">الدفع</a>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  منصة خدمات رقمية احترافية — لوجو، فيديو، عروض، ترجمة، أفكار مشاريع، مواقع — سريعة وذكية.
+</section>
+
+<!-- 3D background canvas -->
+<canvas id="three-bg" style="position:fixed;left:0;top:0;width:100%;height:100%;z-index:-2;opacity:0.08"></canvas>
+
+<!-- SERVICES -->
+<section id="services" class="section">
+  <h2 id="services-title">منتجاتنا وخدماتنا</h2>
+  <div class="service-grid" id="serviceGrid"></div>
+  <p class="small-muted" id="services-note" style="text-align:center;margin-top:12px">* الأسعار قابلة للتفاوض — العربية هي اللغة الأساسية</p>
+</section>
+
+<!-- PAYMENT -->
+<section id="payment" class="section">
+  <h2 id="payment-title">الدفع</h2>
+  <div class="cart">
+    <p class="small-muted" id="payment-desc">الدفع يتم عبر البطاقة (أو PayPal/STC) قبل استلام الخدمة. الطلبات تصل إلى بريدنا الإلكتروني بعد التحقق.</p>
+    <label id="label-service">اختر الخدمة:</label>
+    <select id="service-select" class="input"></select>
+
+    <label id="label-extra">اختيارات إضافية:</label>
+    <select id="extra-options" class="input">
+      <option value="0">بدون إضافات</option>
+      <option value="10">تسريع التسليم +10 ريال</option>
+      <option value="20">خدمة مميزة +20 ريال</option>
+    </select>
+
+    <input id="client-name" class="input" placeholder="اسمك" />
+    <input id="client-email" class="input" placeholder="بريدك الإلكتروني" />
+    <input id="client-amount" class="input" placeholder="المبلغ بالريال" readonly />
+
+    <label id="label-method">طريقة الدفع:</label>
+    <select id="client-card" class="input">
+      <option value="card">بطاقة ائتمان</option>
+      <option value="paypal">PayPal</option>
+      <option value="stcpay">STC Pay</option>
+    </select>
+
+    <textarea id="client-note" class="input" placeholder="ملاحظات إضافية"></textarea>
+    <div class="controls" style="justify-content:center">
+      <button class="btn" onclick="submitPayment()">ادفع الآن</button>
+    </div>
+
+    <p class="small-muted" style="text-align:center;margin-top:12px">
+      للتواصل: <strong style="color:var(--gold)">0547664748</strong> — <a id="wa-link" href="https://wa.me/966547664748" style="color:var(--gold)">واتساب</a>
+    </p>
+  </div>
+</section>
+
+<!-- CHAT / BOT -->
+<div class="chat-toggle" id="openChat">🤖 مساعد AI</div>
+
+<div class="chat-window animate__animated animate__fadeInUp" id="chatWindow" role="dialog" aria-label="Chat">
+  <div class="chat-header" id="chatHeader">مساعد Graphos AI</div>
+
+  <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
+
+  <div class="quick-buttons" id="quickButtons"></div>
+
+  <div class="chat-input">
+    <input id="chatInput" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key==='Enter'){sendMessage();}" />
+    <button onclick="sendMessage()" class="btn">إرسال</button>
+  </div>
+</div>
+
+<!-- ADMIN (hidden, open by double-click on logo) -->
+<div class="admin-panel" id="adminPanel" aria-hidden="true">
+  <h3>لوحة إدارة Graphos</h3>
+
+  <div id="adminLogin">
+    <p class="small-muted">ادخل كلمة المرور لفتح لوحة الإدارة (الزوار لا يستطيعون الوصول).</p>
+    <input id="adminPass" type="password" class="input" placeholder="كلمة المرور" />
+    <div class="admin-row">
+      <button class="btn" onclick="adminLogin()">تأكيد</button>
+      <button class="btn" style="background:#333;color:var(--gold)" onclick="closeAdmin()">إغلاق</button>
+    </div>
+  </div>
+
+  <div id="adminContent" class="hidden" aria-hidden="true">
+    <label>تعديل سعر خدمة:</label>
+    <select id="admin-service-select" class="input"></select>
+    <input id="admin-new-price" type="number" class="input" placeholder="السعر الجديد" />
+    <button class="btn" onclick="updateServicePrice()">حفظ السعر</button>
+
+    <label style="margin-top:12px">رفع صورة للخدمة:</label>
+    <input id="admin-upload-img" type="file" accept="image/*" class="input" />
+    <div class="admin-row">
+      <button class="btn" onclick="uploadServiceImage()">رفع الصورة</button>
+      <button class="btn" style="background:#333;color:var(--gold)" onclick="resetServiceImage()">إعادة افتراضية</button>
+    </div>
+
+    <label style="margin-top:12px">رفع لوجو جديد:</label>
+    <input id="admin-upload-logo" type="file" accept="image/*" class="input" />
+    <div class="admin-row">
+      <button class="btn" onclick="uploadLogo()">رفع اللوجو</button>
+      <button class="btn" style="background:#333;color:var(--gold)" onclick="resetLogo()">إعادة لوجو</button>
+    </div>
+
+    <label style="margin-top:12px">تعديل نصوص البوت (سطر=نص الرد، مثال: لوجو=نص)</label>
+    <textarea id="admin-bot-text" class="input" placeholder="لوجو=خدمة تصميم لوجو..."></textarea>
+    <button class="btn" onclick="updateBotText()">تحديث نصوص البوت</button>
+
+    <div style="margin-top:14px" class="small-muted">الخروج سيُبقي التعديلات محفوظة في المتصفح (localStorage).</div>
+  </div>
+</div>
+
+<footer class="footer">
+  Graphos Services © 2025 — بريد: <a href="mailto:Graphos.svcs@gmail.com" style="color:var(--gold)">Graphos.svcs@gmail.com</a>
+</footer>
+
+<!-- SCRIPTS -->
+<script>
+/* ---------------------------
+  CONFIG & INITIALIZATION
+----------------------------*/
+const ADMIN_PASSWORD = "GraphosFRSVCS17"; // طلبت هذا
+const STORAGE_KEY = "graphos_services_v1";
+const STORAGE_LOGO = "graphos_logo_v1";
+const BOT_TEXTS_KEY = "graphos_bottexts_v1";
+
+/* Default services data */
+const DEFAULT_SERVICES = {
+  logo: { key:"logo", name_ar:"تصميم لوجو", name_en:"Logo Design", price:15, img:"https://via.placeholder.com/640x360?text=Logo" },
+  video: { key:"video", name_ar:"تصميم فيديو", name_en:"Video Production", price:20, img:"https://via.placeholder.com/640x360?text=Video" },
+  slides: { key:"slides", name_ar:"عروض باوربوينت", name_en:"Presentation Slides", price:4, img:"https://via.placeholder.com/640x360?text=Slides" },
+  full: { key:"full", name_ar:"عرض شامل", name_en:"Full Package", price:65, img:"https://via.placeholder.com/640x360?text=Full+Package" },
+  translate: { key:"translate", name_ar:"ترجمة", name_en:"Translation", price:15, img:"https://via.placeholder.com/640x360?text=Translate" },
+  ideas: { key:"ideas", name_ar:"أفكار مشاريع", name_en:"Project Ideas", price:20, img:"https://via.placeholder.com/640x360?text=Ideas" },
+  website: { key:"website", name_ar:"تصميم موقع", name_en:"Website Design", price:1500, img:"https://via.placeholder.com/640x360?text=Website" }
+};
+
+/* Default bot texts (can be updated via admin) */
+const DEFAULT_BOT_TEXTS = {
+  "greeting_ar":"مرحبًا! أنا مساعد Graphos الذكي — كيف أستطيع مساعدتك اليوم؟",
+  "greeting_en":"Hello! I'm the Graphos AI assistant — how can I help you today?",
+  "logo_ar":"🤖 خدمة تصميم لوجو احترافي — الأسعار تبدأ من 15 ريال ويمكن تسريع التسليم مقابل رسوم إضافية.",
+  "logo_en":"🤖 Professional logo design — prices start at 15 SAR; rush delivery available for extra fee.",
+  "video_ar":"🤖 تصميم فيديو: 30s=20 ريال، 60s=30، 90s=40، 120s=50.",
+  "video_en":"🤖 Video packages: 30s=20 SAR, 60s=30, 90s=40, 120s=50.",
+  "slides_ar":"🤖 عروض باوربوينت: كل شريحة 4 ريال (الحد الأدنى 5 شرائح).",
+  "slides_en":"🤖 Slides: 4 SAR per slide (minimum 5).",
+  "full_ar":"🤖 العرض الشامل: خيار 10 شرائح+فيديو+لوغو=65 ريال أو 20 سلايد+2min+لوغو=115 ريال.",
+  "full_en":"🤖 Full package: 10 slides+video+logo for 65 SAR, or 20 slides+2min+logo for 115 SAR.",
+  "translate_ar":"🤖 الترجمة: كل دقيقة نص = 15 ريال (حسب طول النص).",
+  "translate_en":"🤖 Translation: 15 SAR per minute of text (approx).",
+  "ideas_ar":"🤖 أفكار مشاريع مبتكرة بسعر ابتدائي 20 ريال، يمكن تفصيل الخطة مقابل رسوم إضافية.",
+  "ideas_en":"🤖 Project ideas starting at 20 SAR, detailed plans available.",
+  "website_ar":"🤖 تصميم موقع متكامل يبدأ من 1500 ريال، يتضمن تصميم متجاوب وميزات أساسية.",
+  "website_en":"🤖 Full website design starts at 1500 SAR, responsive and feature-ready."
+};
+
+/* Runtime state */
+let services = {};
+let botTexts = {};
+let currentLang = "ar";
+
+/* Utility: local storage load/save */
+function loadState(){
+  const s = localStorage.getItem(STORAGE_KEY);
+  services = s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_SERVICES));
+  const bl = localStorage.getItem(BOT_TEXTS_KEY);
+  botTexts = bl ? JSON.parse(bl) : JSON.parse(JSON.stringify(DEFAULT_BOT_TEXTS));
+  const logo = localStorage.getItem(STORAGE_LOGO);
+  if(logo) document.getElementById("site-logo").src = logo;
+  else document.getElementById("site-logo").src = "https://via.placeholder.com/60?text=G";
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(services));
+  localStorage.setItem(BOT_TEXTS_KEY, JSON.stringify(botTexts));
+}
+
+/* Initialize UI */
+function renderServices(){
+  const grid = document.getElementById("serviceGrid");
+  grid.innerHTML = "";
+  const sel = document.getElementById("service-select");
+  const adminSel = document.getElementById("admin-service-select");
+  sel.innerHTML = ""; adminSel.innerHTML = "";
+  for(const k in services){
+    const s = services[k];
+    const title = currentLang==="ar"?s.name_ar:s.name_en;
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <img src="${s.img}" alt="${title}" />
+      <h3>${title}</h3>
+      <div class="price-box">${s.price} ${currentLang==="ar" ? "ريال" : "SAR"}</div>
+      <div class="controls">
+        <button class="btn" onclick="selectQuick('${s.key}')">${currentLang==="ar"?"اختيار":"Select"}</button>
+      </div>
+    `;
+    grid.appendChild(card);
+    const opt = document.createElement("option");
+    opt.value = s.key; opt.textContent = title; sel.appendChild(opt);
+    const opt2 = document.createElement("option");
+    opt2.value = s.key; opt2.textContent = title; adminSel.appendChild(opt2);
+  }
+  updateAmount();
+  renderQuickButtons();
+}
+
+/* Quick select a service (via card) */
+function selectQuick(key){
+  document.getElementById("service-select").value = key;
+  updateAmount();
+  openChat();
+  botSay( currentLang==="ar" ? `اخترت خدمة ${services[key].name_ar}. هل تريد تفاصيل أو الإرسال للطلب؟` : `You picked ${services[key].name_en}. Need details or place order?` );
+  addBotSuggestion(key);
+}
+
+/* Quick buttons in chat (service shortcuts) */
+function renderQuickButtons(){
+  const container = document.getElementById("quickButtons");
+  container.innerHTML = "";
+  for(const k in services){
+    const s = services[k];
+    const label = currentLang==="ar"?s.name_ar:s.name_en;
+    const btn = document.createElement("button");
+    btn.textContent = label;
+    btn.onclick = ()=>{ addUserMessage(label); generateAdvancedReply(label, k); };
+    container.appendChild(btn);
+  }
+}
+
+/* -------------------------
+  Admin: login, show/hide
+--------------------------*/
+const adminPanel = document.getElementById("adminPanel");
+const adminContent = document.getElementById("adminContent");
+
+function showAdmin(){
+  adminPanel.style.display = "block";
+}
+function closeAdmin(){
+  adminPanel.style.display = "none";
+  adminContent.classList.add("hidden");
+  adminContent.style.display = "none";
+  document.getElementById("adminLogin").style.display = "block";
+}
+
+/* double-click logo => ask password modal (simple) */
+let dblTimer = null;
+let dblCount = 0;
+const logoEl = document.getElementById("site-logo");
+logoEl.addEventListener('click', ()=>{
+  dblCount++;
+  clearTimeout(dblTimer);
+  dblTimer = setTimeout(()=>{ dblCount = 0; }, 500);
+  if(dblCount === 2){
+    dblCount = 0;
+    // show admin panel (login area)
+    showAdmin();
+    document.getElementById("adminPass").focus();
+  }
+});
+
+/* Admin login */
+function adminLogin(){
+  const val = document.getElementById("adminPass").value || "";
+  if(val === ADMIN_PASSWORD){
+    // show content
+    document.getElementById("adminLogin").style.display = "none";
+    adminContent.classList.remove("hidden");
+    adminContent.style.display = "block";
+    sessionStorage.setItem("graphos_admin_logged","1");
+    populateAdminFields();
+    alert("تم تسجيل الدخول كمسؤول.");
+  } else {
+    alert("كلمة المرور خاطئة.");
+  }
+}
+function populateAdminFields(){
+  const sel = document.getElementById("admin-service-select");
+  sel.innerHTML = "";
+  for(const k in services){
+    const o = document.createElement("option");
+    o.value = k; o.textContent = services[k][ currentLang==="ar" ? "name_ar":"name_en"];
+    sel.appendChild(o);
+  }
+  document.getElementById("admin-bot-text").value = Object.entries(botTexts).map(([k,v])=>`${k}=${v}`).join("\n");
+}
+
+/* Auto-login if sessionStorage set */
+if(sessionStorage.getItem("graphos_admin_logged")==="1"){
+  showAdmin();
+  document.getElementById("adminContent").classList.remove("hidden");
+  document.getElementById("adminContent").style.display = "block";
+  document.getElementById("adminLogin").style.display = "none";
+}
+
+/* Admin actions */
+function updateServicePrice(){
+  const sel = document.getElementById("admin-service-select").value;
+  const price = parseFloat(document.getElementById("admin-new-price").value);
+  if(!isNaN(price) && price >= 0){
+    services[sel].price = price;
+    saveState(); renderServices();
+    alert(currentLang==="ar" ? "تم تحديث السعر":"Price updated");
+  } else alert(currentLang==="ar" ? "أدخل سعرًا صحيحًا":"Enter a valid price");
+}
+
+function uploadLogo(){
+  const f = document.getElementById("admin-upload-logo").files[0];
+  if(!f){ alert(currentLang==="ar" ? "اختر ملف لوجو":"Choose a logo file"); return; }
+  const r = new FileReader();
+  r.onload = ()=>{ document.getElementById("site-logo").src = r.result; localStorage.setItem(STORAGE_LOGO, r.result); alert(currentLang==="ar" ? "تم تحديث اللوجو":"Logo updated"); };
+  r.readAsDataURL(f);
+}
+
+function resetLogo(){
+  document.getElementById("site-logo").src = "https://via.placeholder.com/60?text=G";
+  localStorage.removeItem(STORAGE_LOGO);
+  alert(currentLang==="ar" ? "تم إعادة اللوجو الافتراضي":"Logo reset");
+}
+
+function uploadServiceImage(){
+  const f = document.getElementById("admin-upload-img").files[0];
+  const key = document.getElementById("admin-service-select").value;
+  if(!f){ alert(currentLang==="ar" ? "اختر صورة":"Choose an image"); return; }
+  const r = new FileReader();
+  r.onload = ()=>{ services[key].img = r.result; saveState(); renderServices(); alert(currentLang==="ar"?"تم رفع الصورة":"Image uploaded"); };
+  r.readAsDataURL(f);
+}
+
+function resetServiceImage(){
+  const key = document.getElementById("admin-service-select").value;
+  services[key].img = `https://via.placeholder.com/640x360?text=${encodeURIComponent( services[key].key )}`;
+  saveState(); renderServices();
+  alert(currentLang==="ar" ? "تم إعادة الصورة الافتراضية":"Image reset");
+}
+
+function updateBotText(){
+  const text = document.getElementById("admin-bot-text").value.trim();
+  if(!text){ alert(currentLang==="ar" ? "أدخل نص البوت":"Enter bot text"); return; }
+  // expected lines of form key=value
+  const lines = text.split("\n");
+  lines.forEach(line=>{
+    const idx = line.indexOf("=");
+    if(idx>0){
+      const key = line.slice(0,idx).trim();
+      const val = line.slice(idx+1).trim();
+      if(key) botTexts[key] = val;
+    }
+  });
+  saveState();
+  alert(currentLang==="ar" ? "تم تحديث نصوص البوت":"Bot texts updated");
+}
+
+/* -------------------------
+  Load saved state then render
+--------------------------*/
+loadState();
+renderServices();
+
+/* If logo not set, set default */
+if(!localStorage.getItem(STORAGE_LOGO)) {
+  document.getElementById("site-logo").src = "https://via.placeholder.com/60?text=G";
+}
+
+/* -------------------------
+  Language toggle
+--------------------------*/
+function setLanguage(lang){
+  currentLang = lang;
+  // Update UI texts
+  document.getElementById("home").querySelector('.hero');
+  document.getElementById("services-title").textContent = (lang==="ar" ? "منتجاتنا وخدماتنا" : "Our Products & Services");
+  document.getElementById("services-note").textContent = (lang==="ar" ? "* الأسعار قابلة للتفاوض — العربية هي اللغة الأساسية" : "* Prices negotiable — Arabic is the default language");
+  document.getElementById("payment-title").textContent = (lang==="ar" ? "الدفع" : "Payment");
+  document.getElementById("payment-desc").textContent = (lang==="ar" ? "الدفع يتم عبر البطاقة (أو PayPal/STC) قبل استلام الخدمة. الطلبات تصل إلى بريدنا الإلكتروني بعد التحقق." : "Payment is via card (or PayPal/STC). Orders will be sent to our email after confirmation.");
+  document.getElementById("label-service").textContent = (lang==="ar" ? "اختر الخدمة:" : "Select service:");
+  document.getElementById("label-extra").textContent = (lang==="ar" ? "اختيارات إضافية:" : "Extra options:");
+  document.getElementById("label-method").textContent = (lang==="ar" ? "طريقة الدفع:" : "Payment method:");
+  document.getElementById("client-name").placeholder = (lang==="ar" ? "اسمك" : "Your name");
+  document.getElementById("client-email").placeholder = (lang==="ar" ? "بريدك الإلكتروني" : "Your email");
+  document.getElementById("client-note").placeholder = (lang==="ar" ? "ملاحظات إضافية" : "Additional notes");
+  document.getElementById("wa-link").textContent = (lang==="ar" ? "واتساب" : "WhatsApp");
+  // update services cards
+  renderServices();
+  populateAdminFields();
+  // update chat greeting
+  // if chat open, show greeting in new language
+}
+
+/* language switch button */
+document.querySelector('.lang-switch').addEventListener('click', ()=>{
+  setLanguage(currentLang==="ar" ? "en":"ar");
+  alert(currentLang==="ar" ? "تم التبديل إلى العربية" : "Switched to English");
+});
+
+/* -------------------------
+  Payment logic
+--------------------------*/
+function updateAmount(){
+  const sel = document.getElementById("service-select").value;
+  const extra = parseFloat(document.getElementById("extra-options").value)||0;
+  const s = services[sel];
+  const amount = (s? s.price : 0) + extra;
+  document.getElementById("client-amount").value = amount;
+}
+
+document.getElementById("service-select").addEventListener('change', updateAmount);
+document.getElementById("extra-options").addEventListener('change', updateAmount);
+
+/* Submit payment: opens mailto with details to Graphos.svcs@gmail.com */
+function submitPayment(){
+  const name = document.getElementById("client-name").value.trim();
+  const email = document.getElementById("client-email").value.trim();
+  const serviceKey = document.getElementById("service-select").value;
+  const s = services[serviceKey];
+  const extraText = document.getElementById("extra-options").selectedOptions[0].text;
+  const amount = document.getElementById("client-amount").value;
+  const method = document.getElementById("client-card").value;
+  const note = document.getElementById("client-note").value.trim();
+  if(!name || !email || !amount){ alert(currentLang==="ar" ? "الرجاء ملء الحقول الأساسية" : "Please fill required fields"); return; }
+  const subject = encodeURIComponent( currentLang==="ar" ? `طلب خدمة من ${name}` : `Service order from ${name}` );
+  const bodyLines = [
+    `${currentLang==="ar" ? "الاسم":"Name"}: ${name}`,
+    `${currentLang==="ar" ? "البريد":"Email"}: ${email}`,
+    `${currentLang==="ar" ? "الخدمة":"Service"}: ${currentLang==="ar" ? s.name_ar : s.name_en }`,
+    `${currentLang==="ar" ? "الإضافات":"Extras"}: ${extraText}`,
+    `${currentLang==="ar" ? "المبلغ":"Amount"}: ${amount} ${currentLang==="ar"?"ريال":"SAR"}`,
+    `${currentLang==="ar" ? "طريقة الدفع":"Payment Method"}: ${method}`,
+    `${currentLang==="ar" ? "ملاحظات":"Notes"}: ${note}`,
+    `${currentLang==="ar" ? "تم الدفع":"Payment status"}: ${currentLang==="ar"?"قبل الاستلام":"before delivery"}`
+  ];
+  const body = encodeURIComponent(bodyLines.join("\n"));
+  const mailto = `mailto:Graphos.svcs@gmail.com?subject=${subject}&body=${body}`;
+  window.location.href = mailto;
+}
+
+/* -------------------------
+  Advanced Bot (option 3)
+--------------------------*/
+const chatWindow = document.getElementById("chatWindow");
+const chatMessages = document.getElementById("chatMessages");
+const chatInput = document.getElementById("chatInput");
+const quickButtonsEl = document.getElementById("quickButtons");
+const openChatBtn = document.getElementById("openChat");
+
+openChatBtn.addEventListener('click', openChat);
+
+function openChat(){
+  chatWindow.style.display = "flex";
+  // initial greeting
+  botSay( botTexts[ currentLang==="ar" ? "greeting_ar":"greeting_en" ] );
+  renderQuickButtons();
+}
+
+function closeChat(){
+  chatWindow.style.display = "none";
+}
+
+function addUserMessage(text){
+  const d = document.createElement("div"); d.className = "msg user"; d.textContent = text; chatMessages.appendChild(d);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addBotMessage(text){
+  const d = document.createElement("div"); d.className = "msg bot"; d.textContent = text; chatMessages.appendChild(d);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+/* typing animation */
+function showTyping(duration=800){
+  const t = document.createElement("div"); t.className = "msg bot typing";
+  t.innerHTML = `<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  chatMessages.appendChild(t);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return t;
+}
+
+/* bot say helper */
+function botSay(text, delay=700){
+  const typ = showTyping();
+  setTimeout(()=>{ typ.remove(); addBotMessage(text); }, delay);
+}
+
+/* send message from input */
+function sendMessage(){
+  const txt = chatInput.value.trim();
+  if(!txt) return;
+  addUserMessage(txt);
+  chatInput.value = "";
+  // process using advanced pipeline
+  setTimeout(()=>{ generateAdvancedReply(txt); }, 350);
+}
+
+/* Advanced reply generator - heuristic + templates */
+function generateAdvancedReply(userText, forcedKey=null){
+  const ut = (userText||"").toLowerCase();
+  // prioritize forcedKey (from quick button)
+  if(forcedKey){
+    const s = services[forcedKey];
+    const text = currentLang==="ar" ? botTexts[`${forcedKey}_ar`] || botTexts["logo_ar"] : botTexts[`${forcedKey}_en`] || botTexts["logo_en"];
+    botSay(text, 500);
+    // offer upsells
+    offerUpsells(forcedKey);
+    return;
+  }
+  // intents
+  // 1. ask price
+  if( /سعر|كم|price|cost/.test(ut) ){
+    // try to find mentioned service
+    for(const k in services){
+      if(ut.includes(k) || ut.includes( services[k].name_ar.toLowerCase() ) || ut.includes( services[k].name_en.toLowerCase() )){
+        const s = services[k];
+        botSay( currentLang==="ar" ? `سعر ${s.name_ar} هو ${s.price} ريال.` : `${s.name_en} costs ${s.price} SAR.`, 600 );
+        offerUpsells(k);
+        return;
+      }
+    }
+    // fallback: give list
+    const list = Object.values(services).map(s=> currentLang==="ar" ? `${s.name_ar}: ${s.price} ريال` : `${s.name_en}: ${s.price} SAR`).join("\n");
+    botSay( currentLang==="ar" ? `هذه أسعارنا الأساسية:\n${list}` : `Here are our base prices:\n${list}`, 700 );
+    return;
+  }
+
+  // 2. ordering intent
+  if( /اطلب|أريد|order|buy|اشتري/.test(ut) ){
+    // try to extract service mention
+    for(const k in services){
+      if(ut.includes(k) || ut.includes(services[k].name_ar.toLowerCase()) || ut.includes(services[k].name_en.toLowerCase())){
+        // prepare order
+        const s = services[k];
+        botSay( currentLang==="ar" ? `حسنًا، أجهز لك طلب ${s.name_ar}. اختر الإضافات ثم اضغط "ادفع الآن" في صفحة الدفع.` : `Great — preparing an order for ${s.name_en}. Choose extras and click "Pay Now".`, 700 );
+        // switch to payment tab
+        document.getElementById('service-select').value = k; updateAmount();
+        document.getElementById('nav-payment').click();
+        return;
+      }
+    }
+    botSay( currentLang==="ar" ? "هل تود أن أجهز لك نموذج طلب؟ أي خدمة تفضل؟" : "Would you like me to prepare an order form? Which service would you like?", 700 );
+    renderQuickButtons();
+    return;
+  }
+
+  // 3. help / greeting
+  if( /مرحبا|مرحبا|hello|hi|salut/.test(ut) ) {
+    botSay( currentLang==="ar" ? botTexts["greeting_ar"] : botTexts["greeting_en"], 500 );
+    return;
+  }
+
+  // 4. translate or examples
+  if( /ترجم|translate|meaning/.test(ut) ){
+    botSay( currentLang==="ar" ? "أرسل لي النص الذي تريد ترجمته وسأعطيك ترجمة سريعة." : "Send the text you want translated and I'll provide a quick translation.", 700 );
+    return;
+  }
+
+  // 5. website / portfolio
+  if( /موقع|website|site/.test(ut) ){
+    const s = services['website'];
+    botSay( currentLang==="ar" ? botTexts["website_ar"] : botTexts["website_en"], 700 );
+    offerUpsells('website');
+    return;
+  }
+
+  // 6. fallback - try to suggest nearest service by keyword match
+  let best = null; let bestScore=0;
+  for(const k in services){
+    const s = services[k];
+    let score = 0;
+    const tokens = (s.name_ar + " " + s.name_en).toLowerCase();
+    if(tokens.includes("logo") && ut.includes("logo")) score+=2;
+    if(tokens.split(" ").some(t=> ut.includes(t))) score++;
+    if(score>bestScore){ best=k; bestScore=score; }
+  }
+  if(best && bestScore>0){
+    const s = services[best];
+    botSay( currentLang==="ar" ? `هل تقصد ${s.name_ar}؟` : `Do you mean ${s.name_en}?`, 600 );
+    offerUpsells(best);
+    return;
+  }
+
+  // final fallback: ask clarifying question and show suggestions
+  botSay( currentLang==="ar" ? "معليش ما فهمت تمامًا، تقدر تختار واحدة من الخدمات الجاهزة بالأسفل أو تسألني عن الأسعار." : "Sorry, I didn't fully understand. Choose a service below or ask about prices.", 700 );
+  renderQuickButtons();
+}
+
+/* Offer upsells: after describing a service, suggest extras and link to payment */
+function offerUpsells(serviceKey){
+  const s = services[serviceKey];
+  setTimeout(()=>{
+    const upsell = currentLang==="ar"
+      ? `تقدر تسريع التسليم مقابل +10 ريال أو خدمة مميزة +20 ريال. لطلب هذه الخدمة اضغط على اختيار ثم توجه لصفحة الدفع.`
+      : `You can rush delivery for +10 SAR or premium service +20 SAR. To order, select and go to Payment page.`;
+    botSay(upsell, 900);
+  }, 700);
+}
+
+/* add bot suggestion (helper when user selects card) */
+function addBotSuggestion(key){
+  const s = services[key];
+  setTimeout(()=>{ botSay( currentLang==="ar" ? `هل تريد أن أجهز نموذج طلب لـ ${s.name_ar} الآن؟` : `Shall I prepare an order form for ${s.name_en} now?` , 700); }, 400);
+}
+
+/* quickReply from quick-buttons in UI */
+function generateAdvancedReply(label, forcedKey){
+  addUserMessage(label);
+  generateAdvancedReply_internal(label, forcedKey);
+}
+function generateAdvancedReply_internal(label, forcedKey){
+  // if forcedKey supplied, call generateAdvancedReply with forcedKey
+  generateAdvancedReply(label, forcedKey); // note: earlier function handles forcedKey
+}
+
+/* -------------------------
+  Helpers for chat UI
+--------------------------*/
+function addUserMessage(text){
+  const d = document.createElement('div'); d.className = 'msg user'; d.textContent = text; chatMessages.appendChild(d); chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+function botSayImmediate(text){
+  addBotMessage(text);
+}
+function addBotMessage(text){
+  const d = document.createElement('div'); d.className = 'msg bot'; d.textContent = text; chatMessages.appendChild(d); chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+/* -------------------------
+  Data persistence
+--------------------------*/
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(services));
+  localStorage.setItem(BOT_TEXTS_KEY, JSON.stringify(botTexts));
+}
+function loadState(){
+  const s = localStorage.getItem(STORAGE_KEY);
+  if(s) services = JSON.parse(s);
+  const b = localStorage.getItem(BOT_TEXTS_KEY);
+  if(b) botTexts = JSON.parse(b);
+}
+loadState();
+
+/* on page load ensure selects filled */
+renderServices();
+populateAdminFields();
+
+/* If admin session set, show admin content */
+if(sessionStorage.getItem("graphos_admin_logged")==="1"){
+  showAdmin();
+  document.getElementById("adminLogin").style.display = "none";
+  document.getElementById("adminContent").classList.remove("hidden");
+  document.getElementById("adminContent").style.display = "block";
+  populateAdminFields();
+}
+
+/* If logo in storage, set it */
+const storedLogo = localStorage.getItem(STORAGE_LOGO);
+if(storedLogo) document.getElementById("site-logo").src = storedLogo;
+
+/* quick open to payment nav when click nav */
+document.getElementById("nav-payment").addEventListener('click', ()=>{ location.hash = "#payment"; window.scrollTo({top:document.getElementById('payment').offsetTop-20, behavior:'smooth'}); });
+
+/* navigation interactions for services */
+document.getElementById("nav-services").addEventListener('click', ()=>{ location.hash="#services"; window.scrollTo({top:document.getElementById('services').offsetTop-20, behavior:'smooth'}); });
+
+/* open chat auto on first visit? no — left to user */
+
+/* Three.js minimal decorative background (no heavy libs) */
+(function threeBackground(){
+  try{
+    const canvas = document.getElementById('three-bg');
+    const ctx = canvas.getContext('2d');
+    function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+    // draw rotating gradient rings (lightweight)
+    let t=0;
+    function frame(){
+      t+=0.005;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      const cx = canvas.width/2, cy = canvas.height/2;
+      for(let i=0;i<6;i++){
+        const r = 200 + i*60;
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(241,199,102,${0.02 + i*0.01})`;
+        ctx.lineWidth = 1.5;
+        ctx.arc(cx + Math.cos(t*(0.8+i*0.3))*30, cy + Math.sin(t*(0.7+i*0.25))*20, r, 0, Math.PI*2);
+        ctx.stroke();
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }catch(e){console.warn("canvas bg skip", e);}
+})();
+
+/* Ensure initial values */
+updateAmount();
+
+/* Exported small helpers for debug in console */
+window.Graphos = {
+  services, botTexts, saveState, loadState, openChat, closeAdmin, adminLogin
+};
+
+</script>
+</body>
+</html>
