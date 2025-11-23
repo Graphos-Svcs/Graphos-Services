@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدفع - Graphos Services</title>
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<style>
+body { margin:0; font-family: Arial, sans-serif; background:#111; color:#fff; }
+header, footer { text-align:center; padding:20px; background:#000; color:#FFD700; }
+section { padding:50px 20px; }
+form { background:#222; padding:20px; border-radius:12px; max-width:500px; margin:auto; }
+input, textarea, select { width:100%; padding:10px; margin:10px 0; border-radius:6px; border:none; }
+button { padding:10px 20px; border:none; border-radius:6px; background:#FFD700; color:#111; font-weight:bold; cursor:pointer; }
+.payment-note { background:#333; padding:15px; border-radius:8px; margin-bottom:20px; text-align:center; }
+nav { text-align:center; margin-bottom:20px; }
+nav a { color:#FFD700; margin:0 10px; text-decoration:none; font-weight:bold; }
+nav a:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<header data-aos="fade-down">
+<h1>سلة المشتريات والدفع</h1>
+<nav>
+<a href="index.html">الرئيسية</a>
+<a href="services.html">الخدمات</a>
+</nav>
+</header>
+
+<section data-aos="fade-up">
+<div class="payment-note">
+<p>⚠️ سياسة الدفع: قبل الاستلام، الدفع يدوي عبر التواصل مع البائع.</p>
+</div>
+
+<h2>طلب الخدمة</h2>
+<form>
+<input type="text" placeholder="الاسم الكامل" required>
+<input type="tel" placeholder="رقم الجوال" required>
+<select required>
+<option value="">اختر الخدمة</option>
+<option value="logo">تصميم لوجو</option>
+<option value="video">تصميم فيديو</option>
+<option value="slides">عروض تقديمية</option>
+<option value="full">عرض شامل</option>
+<option value="ideas">أفكار مشاريع</option>
+<option value="translate">ترجمة</option>
+<option value="website">تصميم مواقع</option>
+</select>
+<textarea placeholder="ملاحظات إضافية"></textarea>
+<button type="submit">إرسال الطلب</button>
+</form>
+</section>
+
+<footer data-aos="fade-up">
+<p>© 2025 Graphos Services - جميع الحقوق محفوظة</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 800, once:true });
+</script>
+
+</body>
+</html>
