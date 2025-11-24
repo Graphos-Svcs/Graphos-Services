@@ -1,0 +1,3885 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphos Services - منصة رقمية احترافية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        /* CSS Reset متقدم */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #d4af37;
+            --accent: #f8f9fa;
+            --text: #2d3436;
+            --light: #ffffff;
+            --dark: #1a1a1a;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --error: #e74c3c;
+            --gradient: linear-gradient(135deg, #0a0a0a 0%, #2d2d2d 100%);
+            --gold-gradient: linear-gradient(135deg, #d4af37 0%, #f9e076 50%, #d4af37 100%);
+            --gold-light: rgba(212, 175, 55, 0.1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.15);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --border-radius: 16px;
+            --neon-glow: 0 0 10px rgba(212, 175, 55, 0.7), 0 0 20px rgba(212, 175, 55, 0.5), 0 0 30px rgba(212, 175, 55, 0.3);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        [dir="ltr"] {
+            --text-direction: ltr;
+            --text-align: left;
+        }
+
+        [dir="rtl"] {
+            --text-direction: rtl;
+            --text-align: right;
+        }
+
+        body {
+            background: var(--accent);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            font-size: 16px;
+            direction: var(--text-direction);
+            text-align: var(--text-align);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 20%);
+            font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== LOADING SCREEN ===== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            color: var(--light);
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-content {
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .loading-logo {
+            width: 120px;
+            height: 120px;
+            background: var(--gold-gradient);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 0 auto 2rem;
+            animation: pulse 1.5s infinite;
+            box-shadow: var(--neon-glow);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .loading-bar-container {
+            width: 400px;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 2rem auto;
+            position: relative;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .loading-bar {
+            height: 100%;
+            background: var(--gold-gradient);
+            width: 0%;
+            transition: width 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--neon-glow);
+        }
+
+        .loading-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        .loading-stats {
+            display: flex;
+            justify-content: space-between;
+            width: 400px;
+            margin: 1rem auto;
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .loading-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: floatParticle 8s infinite linear;
+            box-shadow: 0 0 10px var(--secondary);
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            color: var(--light);
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .header-scrolled {
+            padding: 1rem 0;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .logo-container:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            background: var(--gold-gradient);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: bold;
+            border: 3px solid rgba(212, 175, 55, 0.5);
+            overflow: hidden;
+            box-shadow: var(--neon-glow);
+            position: relative;
+        }
+
+        .logo-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .logo-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite alternate;
+            text-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            position: relative;
+        }
+
+        .logo-text::after {
+            content: 'AI';
+            position: absolute;
+            top: -8px;
+            right: -25px;
+            font-size: 0.8rem;
+            background: var(--success);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        [dir="ltr"] .logo-text::after {
+            right: auto;
+            left: -25px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        nav ul li a {
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+        }
+
+        nav ul li a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gold-gradient);
+            transition: var(--transition);
+            z-index: -1;
+            border-radius: 30px;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+            border-color: var(--secondary);
+        }
+
+        nav ul li a:hover::before {
+            left: 0;
+        }
+
+        .language-switcher {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            padding: 0.8rem 1.8rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .language-switcher::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gold-gradient);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .language-switcher:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .language-switcher:hover::before {
+            left: 0;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: var(--gradient);
+            color: var(--light);
+            padding: 180px 0 100px;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                linear-gradient(45deg, rgba(10, 10, 10, 0.9) 0%, rgba(45, 45, 45, 0.7) 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(212,175,55,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text {
+            animation: slideInRight 1s ease;
+        }
+
+        [dir="ltr"] .hero-text {
+            animation: slideInLeft 1s ease;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--gold-gradient);
+            color: var(--primary);
+            padding: 1rem 2.2rem;
+            border-radius: 35px;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--neon-glow);
+            animation: pulse 3s infinite;
+            border: 2px solid rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff 0%, #f9e076 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            width: 200px;
+            height: 4px;
+            background: var(--gold-gradient);
+            border-radius: 2px;
+            box-shadow: var(--neon-glow);
+        }
+
+        [dir="ltr"] .hero-title::after {
+            right: auto;
+            left: 0;
+        }
+
+        .hero-description {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            line-height: 1.8;
+            font-weight: 400;
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            border-right: 4px solid var(--secondary);
+            backdrop-filter: blur(10px);
+        }
+
+        [dir="ltr"] .hero-description {
+            border-right: none;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1.3rem 2.8rem;
+            border-radius: 35px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: var(--transition);
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button.primary {
+            background: var(--gold-gradient);
+            color: var(--primary);
+            box-shadow: var(--neon-glow);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .cta-button.primary:hover {
+            transform: translateY(-8px) scale(1.05) rotateX(10deg);
+            box-shadow: 0 25px 60px rgba(212, 175, 55, 0.6), var(--neon-glow);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: var(--light);
+            border: 3px solid var(--secondary);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .cta-button.secondary:hover {
+            background: var(--secondary);
+            color: var(--primary);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4), var(--neon-glow);
+        }
+
+        .hero-visual {
+            position: relative;
+            height: 500px;
+            animation: slideInLeft 1s ease;
+        }
+
+        [dir="ltr"] .hero-visual {
+            animation: slideInRight 1s ease;
+        }
+
+        .floating-shapes {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: var(--gold-gradient);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2.5rem;
+            box-shadow: var(--neon-glow);
+            animation: float 6s ease-in-out infinite;
+            border: 3px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .shape:hover {
+            transform: scale(1.2) rotate(15deg);
+            animation-play-state: paused;
+        }
+
+        .shape-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .shape-2 { top: 60%; right: 15%; animation-delay: 1.5s; }
+        .shape-3 { bottom: 15%; left: 25%; animation-delay: 3s; }
+        .shape-4 { top: 25%; right: 5%; animation-delay: 4.5s; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gold-gradient);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3), var(--neon-glow);
+        }
+
+        .stat-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        /* ===== SERVICES SECTION ===== */
+        .services {
+            padding: 120px 0;
+            background: var(--accent);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header h2 {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gold-gradient);
+            border-radius: 2px;
+            box-shadow: var(--neon-glow);
+        }
+
+        .section-header p {
+            font-size: 1.4rem;
+            color: var(--text);
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .service-card {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gold-gradient);
+            box-shadow: var(--neon-glow);
+        }
+
+        [dir="ltr"] .service-card::before {
+            right: auto;
+            left: 0;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: var(--shadow-lg), 0 20px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        .service-icon {
+            width: 90px;
+            height: 90px;
+            background: var(--gold-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            font-size: 2.2rem;
+            box-shadow: var(--neon-glow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .service-icon::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: var(--gold-gradient);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.5;
+            animation: pulse 2s infinite;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .service-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .service-card p {
+            color: var(--text);
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        .service-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            background: var(--gold-light);
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .service-card:hover .service-image {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .service-features {
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .feature-item i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--gold-light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .pricing-table th,
+        .pricing-table td {
+            padding: 1.2rem;
+            text-align: right;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            font-size: 1rem;
+        }
+
+        [dir="ltr"] .pricing-table th,
+        [dir="ltr"] .pricing-table td {
+            text-align: left;
+        }
+
+        .pricing-table th {
+            background: var(--secondary);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .pricing-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .price {
+            font-weight: 800;
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.9em;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        [dir="ltr"] .original-price {
+            margin-left: 0;
+            margin-right: 8px;
+        }
+
+        .add-to-cart {
+            background: var(--primary);
+            color: var(--light);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-to-cart::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .add-to-cart:hover::before {
+            left: 100%;
+        }
+
+        .add-to-cart:hover {
+            background: var(--secondary);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .negotiable {
+            font-size: 1rem;
+            color: var(--text);
+            opacity: 0.7;
+            font-style: italic;
+            display: block;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-weight: 500;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px dashed var(--secondary);
+        }
+
+        /* ===== ADMIN PANEL ===== */
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+        }
+
+        .admin-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .admin-content h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .admin-section {
+            margin-bottom: 2rem;
+        }
+
+        .admin-section h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .admin-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .admin-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--secondary);
+            color: var(--primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-btn.danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .service-upload {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px dashed var(--secondary);
+            border-radius: 8px;
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about {
+            padding: 120px 0;
+            background: var(--gradient);
+            color: var(--light);
+            position: relative;
+        }
+
+        .about-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .about-text {
+            animation: slideInRight 1s ease;
+        }
+
+        .about-text h2 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #f9e076 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .about-text p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .mission-vision {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .mission-card, .vision-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-card::before, .vision-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gold-gradient);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .mission-card:hover, .vision-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .mission-card:hover::before, .vision-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .mission-card h3, .vision-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .about-visual {
+            position: relative;
+            height: 500px;
+            animation: slideInLeft 1s ease;
+        }
+
+        .visual-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            box-shadow: var(--neon-glow);
+        }
+
+        /* ===== HOW IT WORKS ===== */
+        .how-it-works {
+            padding: 120px 0;
+            background: var(--accent);
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .step-card {
+            background: var(--light);
+            padding: 3rem 2.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--secondary);
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: var(--gold-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0 auto 2rem;
+            box-shadow: var(--neon-glow);
+            position: relative;
+        }
+
+        .step-number::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: var(--gold-gradient);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.5;
+            animation: pulse 2s infinite;
+        }
+
+        .step-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .step-card p {
+            color: var(--text);
+            opacity: 0.8;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        /* ===== FAQ SECTION ===== */
+        .faq {
+            padding: 120px 0;
+            background: var(--accent);
+        }
+
+        .faq-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-item:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .faq-question {
+            padding: 2rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            background: var(--gold-light);
+        }
+
+        .faq-question:hover {
+            background: var(--gold-gradient);
+            color: var(--primary);
+        }
+
+        .faq-answer {
+            padding: 0 2rem 2rem;
+            color: var(--text);
+            opacity: 0.8;
+            line-height: 1.7;
+            font-size: 1.1rem;
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .faq-toggle {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            padding: 120px 0;
+            background: var(--gradient);
+            color: var(--light);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><circle fill="rgba(212,175,55,0.05)" cx="500" cy="500" r="400"/></svg>');
+            animation: rotate 20s linear infinite;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #f9e076 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-content p {
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            line-height: 1.7;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--gradient);
+            color: var(--light);
+            padding: 5rem 0 2rem;
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background: var(--secondary);
+            margin-top: 0.8rem;
+            border-radius: 2px;
+            box-shadow: var(--neon-glow);
+        }
+
+        .contact-info p {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .quick-links {
+            list-style: none;
+        }
+
+        .quick-links li {
+            margin-bottom: 1.2rem;
+        }
+
+        .quick-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+            opacity: 0.9;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quick-links a:hover {
+            opacity: 1;
+            color: var(--secondary);
+            transform: translateX(10px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: var(--light);
+            transition: var(--transition);
+            font-size: 1.3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gold-gradient);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: var(--neon-glow);
+        }
+
+        .social-links a:hover::before {
+            left: 0;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-bottom p {
+            margin-bottom: 0.8rem;
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+
+        /* ===== AI ASSISTANT ===== */
+        .ai-assistant {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            z-index: 1000;
+        }
+
+        [dir="ltr"] .ai-assistant {
+            left: auto;
+            right: 40px;
+        }
+
+        .ai-toggle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gold-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: var(--neon-glow);
+            transition: var(--transition);
+            position: relative;
+            border: none;
+            animation: pulseEnhanced 2s infinite;
+        }
+
+        .ai-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: var(--gold-gradient);
+            opacity: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .ai-toggle:hover {
+            transform: scale(1.15) rotate(15deg);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4), var(--neon-glow);
+        }
+
+        .ai-chatbot {
+            position: absolute;
+            bottom: 100px;
+            left: 0;
+            width: 450px;
+            background: var(--light);
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3), var(--neon-glow);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.4s ease-out;
+            z-index: 1001;
+            border: 3px solid rgba(212, 175, 55, 0.3);
+        }
+
+        [dir="ltr"] .ai-chatbot {
+            left: auto;
+            right: 0;
+        }
+
+        .ai-chatbot.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background: var(--gradient);
+            color: var(--light);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chat-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-title h3 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .status.online::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-btn {
+            background: transparent;
+            border: none;
+            color: var(--light);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+
+        .chat-btn:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.1);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-height: 400px;
+            background: #fafafa;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            animation: messageSlide 0.4s ease;
+        }
+
+        .message.bot-message {
+            align-self: flex-start;
+        }
+
+        .message.user-message {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--gold-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            flex-shrink: 0;
+            font-size: 1.3rem;
+            box-shadow: var(--neon-glow);
+        }
+
+        .message-content {
+            max-width: 75%;
+        }
+
+        .message-text {
+            padding: 15px 20px;
+            border-radius: 22px;
+            background: var(--gold-light);
+            line-height: 1.6;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .user-message .message-text {
+            background: var(--gradient);
+            color: var(--light);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .typing-indicator {
+            display: inline-flex;
+            gap: 6px;
+            padding: 15px 20px;
+            align-items: center;
+            background: var(--gold-light);
+            border-radius: 22px;
+        }
+
+        .typing-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        .typing-dot:nth-child(3) { animation-delay: 0s; }
+
+        .chat-input-container {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+            background: var(--light);
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #eee;
+            border-radius: 25px;
+            outline: none;
+            transition: var(--transition);
+            font-size: 1rem;
+            background: #fafafa;
+        }
+
+        .chat-input input:focus {
+            border-color: var(--secondary);
+            background: var(--light);
+            box-shadow: 0 0 0 3px var(--gold-light);
+        }
+
+        .voice-btn {
+            background: transparent;
+            border: none;
+            color: var(--secondary);
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .voice-btn:hover {
+            background: var(--gold-light);
+            transform: scale(1.1);
+        }
+
+        .voice-btn.listening {
+            color: var(--error);
+            animation: pulse 1s infinite;
+        }
+
+        .send-button {
+            background: var(--secondary);
+            color: var(--primary);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .send-button:hover {
+            background: var(--primary);
+            color: var(--secondary);
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .quick-actions {
+            padding: 1.5rem;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            border-top: 1px solid #eee;
+            background: #fafafa;
+        }
+
+        .quick-btn {
+            background: var(--gold-light);
+            border: 2px solid var(--secondary);
+            color: var(--primary);
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .quick-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .chat-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+
+        .suggestion-chip {
+            background: var(--gold-light);
+            border: 1px solid var(--secondary);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .suggestion-chip:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* ===== NOTIFICATION SYSTEM ===== */
+        .notification-system {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        [dir="ltr"] .notification-system {
+            right: auto;
+            left: 20px;
+        }
+
+        .notification {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            border-right: 5px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 350px;
+            animation: slideInRight 0.5s ease;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        [dir="ltr"] .notification {
+            border-right: none;
+            border-left: 5px solid var(--secondary);
+            animation: slideInLeft 0.5s ease;
+        }
+
+        .notification.success { border-right-color: var(--success); }
+        .notification.error { border-right-color: var(--error); }
+        .notification.warning { border-right-color: var(--warning); }
+        .notification.info { border-right-color: #3498db; }
+
+        [dir="ltr"] .notification.success { border-left-color: var(--success); }
+        [dir="ltr"] .notification.error { border-left-color: var(--error); }
+        [dir="ltr"] .notification.warning { border-left-color: var(--warning); }
+        [dir="ltr"] .notification.info { border-left-color: #3498db; }
+
+        /* ===== PAYMENT MODAL ===== */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translate3d(0,0,0);
+            }
+            40%, 43% {
+                transform: translate3d(0,-20px,0);
+            }
+            70% {
+                transform: translate3d(0,-10px,0);
+            }
+            90% {
+                transform: translate3d(0,-5px,0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pulseEnhanced {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 15px rgba(212, 175, 55, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+            }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(5deg); }
+        }
+
+        @keyframes glow {
+            0% { 
+                text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            }
+            100% { 
+                text-shadow: 0 0 20px rgba(212, 175, 55, 0.8),
+                             0 0 40px rgba(212, 175, 55, 0.6);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes slideUpEnhanced {
+            from {
+                opacity: 0;
+                transform: translateY(100px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes floatParticle {
+            0%, 100% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            25% {
+                transform: translateY(-100px) translateX(100px) rotate(90deg);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-200px) translateX(-100px) rotate(180deg);
+                opacity: 0.4;
+            }
+            75% {
+                transform: translateY(-100px) translateX(-200px) rotate(270deg);
+                opacity: 0.7;
+            }
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1200px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            
+            .section-header h2 {
+                font-size: 3rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+            
+            .hero-visual {
+                order: -1;
+                height: 300px;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .ai-chatbot {
+                width: 350px;
+                left: -50px;
+            }
+            
+            [dir="ltr"] .ai-chatbot {
+                left: auto;
+                right: -50px;
+            }
+            
+            .mission-vision {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2.2rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .ai-chatbot {
+                width: 320px;
+                left: -80px;
+            }
+            
+            [dir="ltr"] .ai-chatbot {
+                left: auto;
+                right: -80px;
+            }
+            
+            .cta-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-particles" id="loadingParticles"></div>
+        <div class="loading-content">
+            <div class="loading-logo">G</div>
+            <h1 style="font-size: 3rem; margin-bottom: 1rem; color: var(--light);">Graphos Services</h1>
+            <p style="font-size: 1.3rem; color: rgba(255,255,255,0.8); margin-bottom: 3rem;" id="loaderText">جاري تحميل المنصة المتقدمة...</p>
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loadingBar"></div>
+            </div>
+            <div class="loading-stats">
+                <span id="loadingStep">جاري تهيئة النظام...</span>
+                <span id="loadingPercent">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="mainHeader">
+        <div class="nav-container">
+            <div class="logo-container" id="logoContainer">
+                <div class="logo-img" id="logoPlaceholder">
+                    G
+                </div>
+                <div class="logo-text">Graphos Services</div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home"><i class="fas fa-home"></i> <span data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+                    <li><a href="#services"><i class="fas fa-concierge-bell"></i> <span data-ar="الخدمات" data-en="Services">الخدمات</span></a></li>
+                    <li><a href="#about"><i class="fas fa-info-circle"></i> <span data-ar="من نحن" data-en="About">من نحن</span></a></li>
+                    <li><a href="#how-it-works"><i class="fas fa-play-circle"></i> <span data-ar="كيف نعمل" data-en="How It Works">كيف نعمل</span></a></li>
+                    <li><a href="#faq"><i class="fas fa-question-circle"></i> <span data-ar="الأسئلة" data-en="FAQ">الأسئلة</span></a></li>
+                    <li><button class="language-switcher" id="languageSwitcher">
+                        <i class="fas fa-globe"></i> <span data-ar="English" data-en="العربية">English</span>
+                    </button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="ai-badge">
+                    <i class="fas fa-robot"></i> <span data-ar="مدعوم بالذكاء الاصطناعي المتقدم" data-en="Powered by Advanced AI">مدعوم بالذكاء الاصطناعي المتقدم</span>
+                </div>
+                <h1 class="hero-title" data-ar="منصتك الرقمية الاحترافية" data-en="Your Professional Digital Platform">منصتك الرقمية الاحترافية</h1>
+                <p class="hero-description" data-ar="مرحباً بك في Graphos Services - منصتك الشاملة لتحويل الأفكار إلى واقع ملموس. نقدم حلول تصميم وإبداع متكاملة باستخدام أحدث تقنيات الذكاء الاصطناعي. شعارات، فيديوهات، عروض تقديمية، ومواقع إلكترونية بجودة استثنائية." data-en="Welcome to Graphos Services - your comprehensive platform for turning ideas into reality. We provide integrated design and creative solutions using the latest AI technologies. Logos, videos, presentations, and websites with exceptional quality.">
+                    مرحباً بك في Graphos Services - منصتك الشاملة لتحويل الأفكار إلى واقع ملموس. نقدم حلول تصميم وإبداع متكاملة باستخدام أحدث تقنيات الذكاء الاصطناعي. شعارات، فيديوهات، عروض تقديمية، ومواقع إلكترونية بجودة استثنائية.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#services" class="cta-button primary">
+                        <i class="fas fa-rocket"></i> <span data-ar="ابدأ مشروعك الآن" data-en="Start Your Project Now">ابدأ مشروعك الآن</span>
+                    </a>
+                    <button class="cta-button secondary" id="heroAiButton">
+                        <i class="fas fa-robot"></i> <span data-ar="جرب المساعد الذكي" data-en="Try AI Assistant">جرب المساعد الذكي</span>
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-shapes">
+                    <div class="shape shape-1"><i class="fas fa-palette"></i></div>
+                    <div class="shape shape-2"><i class="fas fa-video"></i></div>
+                    <div class="shape shape-3"><i class="fas fa-code"></i></div>
+                    <div class="shape shape-4"><i class="fas fa-lightbulb"></i></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label" data-ar="مشروع مكتمل" data-en="Completed Projects">مشروع مكتمل</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label" data-ar="رضا العملاء" data-en="Client Satisfaction">رضا العملاء</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label" data-ar="دعم فني" data-en="Technical Support">دعم فني</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7+</div>
+                    <div class="stat-label" data-ar="خدمات متاحة" data-en="Available Services">خدمات متاحة</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-ar="خدماتنا المتكاملة" data-en="Our Integrated Services">خدماتنا المتكاملة</h2>
+                <p data-ar="نقدم مجموعة شاملة من خدمات التصميم والتطوير بأسعار تنافسية وجودة استثنائية" data-en="We provide a comprehensive range of design and development services at competitive prices with exceptional quality">
+                    نقدم مجموعة شاملة من خدمات التصميم والتطوير بأسعار تنافسية وجودة استثنائية
+                </p>
+            </div>
+            <div class="services-grid" id="servicesGrid">
+                <!-- Services will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-content">
+            <div class="about-text">
+                <h2 data-ar="منصة إبداعية رائدة" data-en="Creative Leading Platform">منصة إبداعية رائدة</h2>
+                <p data-ar="Graphos Services ليست مجرد منصة عادية، بل هي رفيقك الإبداعي في رحلة تحويل الأفكار إلى واقع ملموس. نؤمن بأن كل فكرة تستحق أن ترى النور، وكل مشروع يستحق أن يظهر بأفضل صورة." data-en="Graphos Services is not just an ordinary platform, but your creative companion in the journey of turning ideas into reality. We believe that every idea deserves to see the light, and every project deserves to appear in the best form.">
+                    Graphos Services ليست مجرد منصة عادية، بل هي رفيقك الإبداعي في رحلة تحويل الأفكار إلى واقع ملموس. نؤمن بأن كل فكرة تستحق أن ترى النور، وكل مشروع يستحق أن يظهر بأفضل صورة.
+                </p>
+                <p data-ar="مع فريق من المحترفين وأحدث تقنيات الذكاء الاصطناعي، نضمن لك تجربة سلسة ونتائج مبهرة تتجاوز توقعاتك. جودة، سرعة، وإبداع في كل خدمة نقدمها." data-en="With a team of professionals and the latest AI technologies, we guarantee you a smooth experience and amazing results that exceed your expectations. Quality, speed, and creativity in every service we provide.">
+                    مع فريق من المحترفين وأحدث تقنيات الذكاء الاصطناعي، نضمن لك تجربة سلسة ونتائج مبهرة تتجاوز توقعاتك. جودة، سرعة، وإبداع في كل خدمة نقدمها.
+                </p>
+                
+                <div class="mission-vision">
+                    <div class="mission-card">
+                        <h3><i class="fas fa-bullseye"></i> <span data-ar="مهمتنا" data-en="Our Mission">مهمتنا</span></h3>
+                        <p data-ar="تمكين الأفراد والشركات من تحقيق رؤاهم الإبداعية عبر حلول رقمية مبتكرة تجمع بين الجودة والسرعة." data-en="Empowering individuals and businesses to achieve their creative visions through innovative digital solutions that combine quality and speed.">
+                            تمكين الأفراد والشركات من تحقيق رؤاهم الإبداعية عبر حلول رقمية مبتكرة تجمع بين الجودة والسرعة.
+                        </p>
+                    </div>
+                    <div class="vision-card">
+                        <h3><i class="fas fa-eye"></i> <span data-ar="رؤيتنا" data-en="Our Vision">رؤيتنا</span></h3>
+                        <p data-ar="الريادة في تقديم الحلول الرقمية المتكاملة التي تلهم الإبداع وتدفع عجلة الابتكار في العالم العربي." data-en="Leading in providing integrated digital solutions that inspire creativity and drive innovation in the Arab world.">
+                            الريادة في تقديم الحلول الرقمية المتكاملة التي تلهم الإبداع وتدفع عجلة الابتكار في العالم العربي.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-visual">
+                <div class="visual-container">
+                    <!-- Visual content will be added via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-ar="كيف نعمل معاً" data-en="How We Work Together">كيف نعمل معاً</h2>
+                <p data-ar="رحلة سلسة من الفكرة إلى التنفيذ في 4 خطوات بسيطة" data-en="A smooth journey from idea to implementation in 4 simple steps">
+                    رحلة سلسة من الفكرة إلى التنفيذ في 4 خطوات بسيطة
+                </p>
+            </div>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 data-ar="اختر خدمتك" data-en="Choose Your Service">اختر خدمتك</h3>
+                    <p data-ar="تصفح خدماتنا المتعددة واختر ما يناسب احتياجاتك من تصميم شعارات، فيديوهات، عروض تقديمية، أو مواقع إلكترونية." data-en="Browse our various services and choose what suits your needs from logo design, videos, presentations, or websites.">
+                        تصفح خدماتنا المتعددة واختر ما يناسب احتياجاتك من تصميم شعارات، فيديوهات، عروض تقديمية، أو مواقع إلكترونية.
+                    </p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 data-ar="ناقش متطلباتك" data-en="Discuss Your Requirements">ناقش متطلباتك</h3>
+                    <p data-ar="استخدم مساعدنا الذكي أو اتصل بنا مباشرة لمناقشة تفاصيل مشروعك ومتطلباتك الخاصة والتوقيت المناسب للتسليم." data-en="Use our AI assistant or contact us directly to discuss your project details, specific requirements, and suitable delivery time.">
+                        استخدم مساعدنا الذكي أو اتصل بنا مباشرة لمناقشة تفاصيل مشروعك ومتطلباتك الخاصة والتوقيت المناسب للتسليم.
+                    </p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 data-ar="الدفع الآمن" data-en="Secure Payment">الدفع الآمن</h3>
+                    <p data-ar="ادفع بسهولة وأمان عبر STC Pay أو البطاقات البنكية. نضمن حماية كاملة لبياناتك ومدفوعاتك." data-en="Pay easily and securely via STC Pay or bank cards. We guarantee complete protection for your data and payments.">
+                        ادفع بسهولة وأمان عبر STC Pay أو البطاقات البنكية. نضمن حماية كاملة لبياناتك ومدفوعاتك.
+                    </p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 data-ar="استلم عملك" data-en="Receive Your Work">استلم عملك</h3>
+                    <p data-ar="احصل على عملك جاهزاً في الوقت المتفق عليه مع مراجعات مجانية ودعم فني متكامل لمدة 7 أيام." data-en="Get your work ready at the agreed time with free revisions and integrated technical support for 7 days.">
+                        احصل على عملك جاهزاً في الوقت المتفق عليه مع مراجعات مجانية ودعم فني متكامل لمدة 7 أيام.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-ar="الأسئلة الشائعة" data-en="Frequently Asked Questions">الأسئلة الشائعة</h2>
+                <p data-ar="إجابات عن أهم الأسئلة التي تدور في ذهنك" data-en="Answers to the most important questions on your mind">
+                    إجابات عن أهم الأسئلة التي تدور في ذهنك
+                </p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span data-ar="كم تستغرق مدة تصميم الشعار؟" data-en="How long does logo design take?">كم تستغرق مدة تصميم الشعار؟</span>
+                        <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-ar="مدة تصميم الشعار تتراوح بين 1-4 أيام عمل حسب سرعة التسليم المختارة:
+                        <br>• 4 أيام: 15 ريال
+                        <br>• 3 أيام: 20 ريال  
+                        <br>• يومين: 25 ريال
+                        <br>• 24 ساعة: 30 ريال
+                        <br>• 6-7 ساعات: 40 ريال
+                        <br>جميع الأسعار قابلة للتفاوض حسب تعقيد التصميم." data-en="Logo design duration ranges from 1-4 working days depending on the chosen delivery speed:
+                        <br>• 4 days: 15 SAR
+                        <br>• 3 days: 20 SAR  
+                        <br>• 2 days: 25 SAR
+                        <br>• 24 hours: 30 SAR
+                        <br>• 6-7 hours: 40 SAR
+                        <br>All prices are negotiable based on design complexity.">
+                            مدة تصميم الشعار تتراوح بين 1-4 أيام عمل حسب سرعة التسليم المختارة:
+                            <br>• 4 أيام: 15 ريال
+                            <br>• 3 أيام: 20 ريال  
+                            <br>• يومين: 25 ريال
+                            <br>• 24 ساعة: 30 ريال
+                            <br>• 6-7 ساعات: 40 ريال
+                            <br>جميع الأسعار قابلة للتفاوض حسب تعقيد التصميم.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span data-ar="هل يمكنني طلب تعديلات بعد التسليم؟" data-en="Can I request revisions after delivery?">هل يمكنني طلب تعديلات بعد التسليم؟</span>
+                        <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-ar="نعم، نقدم مراجعة واحدة مجانية بعد التسليم لكل خدمة. يمكنك طلب التعديلات خلال 7 أيام من استلام العمل. للتعديلات الإضافية، يتم حساب رسوم حسب الوقت المطلوب." data-en="Yes, we provide one free revision after delivery for each service. You can request modifications within 7 days of receiving the work. For additional revisions, fees are calculated based on the required time.">
+                            نعم، نقدم مراجعة واحدة مجانية بعد التسليم لكل خدمة. يمكنك طلب التعديلات خلال 7 أيام من استلام العمل. للتعديلات الإضافية، يتم حساب رسوم حسب الوقت المطلوب.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span data-ar="كيف يتم الدفع وما ضمانات الأمان؟" data-en="How is payment made and what are the security guarantees?">كيف يتم الدفع وما ضمانات الأمان؟</span>
+                        <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-ar="الدفع يتم عبر STC Pay، البطاقات البنكية، أو التحويل البنكي. نستخدم أحدث تقنيات التشفير لحماية بياناتك. جميع المعاملات مؤمنة ولا نحفظ معلومات بطاقاتك. يمكنك طلب إيصال دفع فوري بعد كل معاملة." data-en="Payment is made via STC Pay, bank cards, or bank transfer. We use the latest encryption technologies to protect your data. All transactions are secure and we do not store your card information. You can request an instant payment receipt after each transaction.">
+                            الدفع يتم عبر STC Pay، البطاقات البنكية، أو التحويل البنكي. نستخدم أحدث تقنيات التشفير لحماية بياناتك. جميع المعاملات مؤمنة ولا نحفظ معلومات بطاقاتك. يمكنك طلب إيصال دفع فوري بعد كل معاملة.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span data-ar="ماذا لو لم أكن راضياً عن الخدمة؟" data-en="What if I'm not satisfied with the service?">ماذا لو لم أكن راضياً عن الخدمة؟</span>
+                        <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-ar="رضاك هو أولويتنا. في حال عدم رضاك عن الخدمة، نقدم:
+                        <br>• مراجعات وتعديلات مجانية
+                        <br>• استرجاع كامل للمبلغ في حال عدم تلبية التوقعات
+                        <br>• دعم فني متواصل لحل أي مشكلة
+                        <br>نعمل حتى ترضى 100% عن النتيجة النهائية." data-en="Your satisfaction is our priority. If you're not satisfied with the service, we provide:
+                        <br>• Free reviews and modifications
+                        <br>• Full refund if expectations are not met
+                        <br>• Continuous technical support to solve any problem
+                        <br>We work until you are 100% satisfied with the final result.">
+                            رضاك هو أولويتنا. في حال عدم رضاك عن الخدمة، نقدم:
+                            <br>• مراجعات وتعديلات مجانية
+                            <br>• استرجاع كامل للمبلغ في حال عدم تلبية التوقعات
+                            <br>• دعم فني متواصل لحل أي مشكلة
+                            <br>نعمل حتى ترضى 100% عن النتيجة النهائية.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 data-ar="جاهز لبدء مشروعك؟" data-en="Ready to start your project?">جاهز لبدء مشروعك؟</h2>
+                <p data-ar="لا تترك فكرتك تنتظر! تواصل معنا الآن وليبدأ رحلتك الإبداعية مع Graphos Services. فريقنا جاهز لتحويل رؤيتك إلى واقع ملموس بأعلى معايير الجودة." data-en="Don't let your idea wait! Contact us now and let your creative journey with Graphos Services begin. Our team is ready to turn your vision into reality with the highest quality standards.">
+                    لا تترك فكرتك تنتظر! تواصل معنا الآن وليبدأ رحلتك الإبداعية مع Graphos Services. فريقنا جاهز لتحويل رؤيتك إلى واقع ملموس بأعلى معايير الجودة.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#services" class="cta-button primary">
+                        <i class="fas fa-rocket"></i> <span data-ar="ابدأ مشروعك الآن" data-en="Start Your Project Now">ابدأ مشروعك الآن</span>
+                    </a>
+                    <a href="https://wa.me/966533682916" class="cta-button secondary">
+                        <i class="fab fa-whatsapp"></i> <span data-ar="تواصل على واتساب" data-en="Contact on WhatsApp">تواصل على واتساب</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo-container" style="justify-content: flex-start; margin-bottom: 2rem;">
+                        <div class="logo-img">G</div>
+                        <div class="logo-text">Graphos Services</div>
+                    </div>
+                    <p data-ar="منصتك الرقمية الاحترافية لتحويل الأفكار إلى واقع ملموس. جودة، إبداع، وابتكار في كل خدمة نقدمها." data-en="Your professional digital platform for turning ideas into reality. Quality, creativity, and innovation in every service we provide.">
+                        منصتك الرقمية الاحترافية لتحويل الأفكار إلى واقع ملموس. جودة، إبداع، وابتكار في كل خدمة نقدمها.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-behance"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 data-ar="اتصل بنا" data-en="Contact Us">اتصل بنا</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> Graphos.svcs@gmail.com</p>
+                        <p><i class="fas fa-phone"></i> +966 53 368 2916</p>
+                        <p><i class="fas fa-map-marker-alt"></i> <span data-ar="الرياض، المملكة العربية السعودية" data-en="Riyadh, Saudi Arabia">الرياض، المملكة العربية السعودية</span></p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة</h3>
+                    <ul class="quick-links">
+                        <li><a href="#home"><i class="fas fa-home"></i> <span data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+                        <li><a href="#services"><i class="fas fa-concierge-bell"></i> <span data-ar="الخدمات" data-en="Services">الخدمات</span></a></li>
+                        <li><a href="#about"><i class="fas fa-info-circle"></i> <span data-ar="من نحن" data-en="About">من نحن</span></a></li>
+                        <li><a href="#how-it-works"><i class="fas fa-play-circle"></i> <span data-ar="كيف نعمل" data-en="How It Works">كيف نعمل</span></a></li>
+                        <li><a href="#faq"><i class="fas fa-question-circle"></i> <span data-ar="الأسئلة الشائعة" data-en="FAQ">الأسئلة الشائعة</span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear">2024</span> Graphos Services. <span data-ar="جميع الحقوق محفوظة" data-en="All rights reserved">جميع الحقوق محفوظة</span>.</p>
+                <p data-ar="تم التطوير باستخدام أحدث تقنيات الذكاء الاصطناعي والبرمجة المتقدمة" data-en="Developed using the latest AI technologies and advanced programming">
+                    تم التطوير باستخدام أحدث تقنيات الذكاء الاصطناعي والبرمجة المتقدمة
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Assistant -->
+    <div class="ai-assistant" id="aiAssistant">
+        <div class="ai-toggle" id="aiToggle">
+            <i class="fas fa-robot"></i>
+            <span class="ai-pulse"></span>
+        </div>
+        <div class="ai-chatbot" id="aiChatbot">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i class="fas fa-robot"></i>
+                    <h3 data-ar="مساعد Graphos AI الذكي" data-en="Graphos AI Smart Assistant">مساعد Graphos AI الذكي</h3>
+                    <div class="status online" data-ar="متصل الآن" data-en="Online Now">متصل الآن</div>
+                </div>
+                <div class="chat-actions">
+                    <button class="chat-btn" id="voiceBtn" title="التحكم الصوتي المتقدم">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="chat-btn" id="clearChat" title="مسح المحادثة">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="chat-btn" id="closeChat" title="إغلاق النافذة">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text" data-ar="<strong>مرحباً! 👋 أنا مساعد Graphos AI المتقدم 🤖</strong><br><br>🎯 <strong>ماذا يمكنني فعلك لك؟</strong><br>• تصميم شعارات احترافية 🎨<br>• إنتاج فيديوهات تسويقية 🎬<br>• عروض تقديمية متطورة 📊<br>• تطوير مواقع إلكترونية 🌐<br>• أفكار مشاريع مبتكرة 💡<br><br>💎 <strong>مميزاتنا:</strong><br>✓ أسعار تنافسية<br>✓ جودة استثنائية<br>✓ تسليم في الوقت المتفق عليه<br>✓ دعم فني 24/7<br><br>أخبرني عن مشروعك وسأساعدك في تحقيقه! 🚀" data-en="<strong>Hello! 👋 I'm Graphos AI Advanced Assistant 🤖</strong><br><br>🎯 <strong>What can I do for you?</strong><br>• Professional logo design 🎨<br>• Marketing video production 🎬<br>• Advanced presentations 📊<br>• Website development 🌐<br>• Innovative project ideas 💡<br><br>💎 <strong>Our Features:</strong><br>✓ Competitive prices<br>✓ Exceptional quality<br>✓ Delivery on time<br>✓ 24/7 technical support<br><br>Tell me about your project and I'll help you achieve it! 🚀">
+                            <strong>مرحباً! 👋 أنا مساعد Graphos AI المتقدم 🤖</strong><br><br>
+                            🎯 <strong>ماذا يمكنني فعلك لك؟</strong><br>
+                            • تصميم شعارات احترافية 🎨<br>
+                            • إنتاج فيديوهات تسويقية 🎬<br>
+                            • عروض تقديمية متطورة 📊<br>
+                            • تطوير مواقع إلكترونية 🌐<br>
+                            • أفكار مشاريع مبتكرة 💡<br><br>
+                            💎 <strong>مميزاتنا:</strong><br>
+                            ✓ أسعار تنافسية<br>
+                            ✓ جودة استثنائية<br>
+                            ✓ تسليم في الوقت المتفق عليه<br>
+                            ✓ دعم فني 24/7<br><br>
+                            أخبرني عن مشروعك وسأساعدك في تحقيقه! 🚀
+                        </div>
+                        <div class="message-time" id="welcomeTime" data-ar="الآن" data-en="Now">الآن</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-suggestions" id="chatSuggestions">
+                <div class="suggestion-chip" data-msg="أريد تصميم شعار احترافي" data-ar="🎨 تصميم شعار" data-en="🎨 Logo Design">🎨 تصميم شعار</div>
+                <div class="suggestion-chip" data-msg="كم سعر تصميم فيديو تسويقي" data-ar="🎬 أسعار الفيديوهات" data-en="🎬 Video Prices">🎬 أسعار الفيديوهات</div>
+                <div class="suggestion-chip" data-msg="أحتاج موقع إلكتروني" data-ar="🌐 تصميم موقع" data-en="🌐 Website Design">🌐 تصميم موقع</div>
+                <div class="suggestion-chip" data-msg="باقة شاملة مع خصم" data-ar="💎 العرض الشامل" data-en="💎 Full Package">💎 العرض الشامل</div>
+            </div>
+            
+            <div class="quick-actions" id="quickActions">
+                <button class="quick-btn" data-msg="أريد طلب خدمة تصميم شعار">
+                    <i class="fas fa-palette"></i> <span data-ar="طلب تصميم شعار" data-en="Order Logo Design">طلب تصميم شعار</span>
+                </button>
+                <button class="quick-btn" data-msg="أريد معرفة أسعار الفيديوهات التسويقية">
+                    <i class="fas fa-video"></i> <span data-ar="أسعار الفيديوهات" data-en="Video Prices">أسعار الفيديوهات</span>
+                </button>
+                <button class="quick-btn" data-msg="كم تكلفة موقع إلكتروني كامل">
+                    <i class="fas fa-code"></i> <span data-ar="تكلفة موقع ويب" data-en="Website Cost">تكلفة موقع ويب</span>
+                </button>
+                <button class="quick-btn" onclick="showSTCPay(50)">
+                    <i class="fas fa-credit-card"></i> <span data-ar="تجربة الدفع" data-en="Payment Test">تجربة الدفع</span>
+                </button>
+            </div>
+            
+            <div class="chat-input-container">
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="اكتب استفسارك هنا أو استخدم التحكم الصوتي..." data-ar-placeholder="اكتب استفسارك هنا أو استخدم التحكم الصوتي..." data-en-placeholder="Type your query here or use voice control...">
+                    <button class="voice-btn" id="voiceToggle">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="send-button" id="sendMessage">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification System -->
+    <div class="notification-system" id="notificationSystem"></div>
+
+    <script>
+        // ===== SYSTEM INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEnhancedSystem();
+        });
+
+        // نظام الذكاء الاصطناعي المتقدم
+        class AdvancedAI {
+            constructor() {
+                this.conversationHistory = [];
+                this.userPreferences = {};
+                this.context = {};
+                this.knowledgeBase = this.initializeKnowledgeBase();
+                this.currentLanguage = 'ar';
+            }
+
+            initializeKnowledgeBase() {
+                return {
+                    services: {
+                        logos: {
+                            basePrice: 15,
+                            description: {
+                                ar: 'تصميم شعارات فريدة تعبر عن هوية علامتك التجارية بدقة وإبداع',
+                                en: 'Unique logo designs that perfectly represent your brand identity'
+                            },
+                            delivery: {
+                                ar: '1-4 أيام',
+                                en: '1-4 days'
+                            }
+                        },
+                        videos: {
+                            basePrice: 20,
+                            description: {
+                                ar: 'إنتاج فيديوهات إبداعية عالية الجودة لتسويق منتجاتك وخدماتك',
+                                en: 'Creative high-quality video production for marketing your products and services'
+                            },
+                            delivery: {
+                                ar: '2-5 أيام',
+                                en: '2-5 days'
+                            }
+                        },
+                        websites: {
+                            basePrice: 1500,
+                            description: {
+                                ar: 'تصميم وتطوير مواقع إلكترونية متكاملة متجاوبة مع جميع الأجهزة',
+                                en: 'Complete website design and development responsive to all devices'
+                            },
+                            delivery: {
+                                ar: '7-14 يوم',
+                                en: '7-14 days'
+                            }
+                        },
+                        ideas: {
+                            basePrice: 20,
+                            description: {
+                                ar: 'تقديم أفكار إبداعية ومبتكرة لمشاريعك وعلامتك التجارية',
+                                en: 'Providing creative and innovative ideas for your projects and brand'
+                            },
+                            delivery: {
+                                ar: '24 ساعة',
+                                en: '24 hours'
+                            }
+                        },
+                        full_package: {
+                            basePrice: 65,
+                            description: {
+                                ar: 'حزمة متكاملة تشمل شعار، فيديو، وعرض تقديمي بخصم خاص',
+                                en: 'Complete package including logo, video, and presentation with special discount'
+                            },
+                            delivery: {
+                                ar: '5-10 أيام',
+                                en: '5-10 days'
+                            }
+                        }
+                    },
+                    pricing: {
+                        negotiable: true,
+                        discounts: {
+                            bundle: 15,
+                            repeat: 10
+                        }
+                    }
+                };
+            }
+
+            setLanguage(lang) {
+                this.currentLanguage = lang;
+            }
+
+            async generateResponse(userMessage, context = {}) {
+                this.conversationHistory.push({
+                    role: 'user',
+                    content: userMessage,
+                    timestamp: new Date(),
+                    language: this.currentLanguage
+                });
+
+                const intent = this.analyzeIntent(userMessage);
+                const sentiment = this.analyzeSentiment(userMessage);
+                
+                let response = await this.processIntent(intent, userMessage, context, sentiment);
+                
+                this.conversationHistory.push({
+                    role: 'assistant',
+                    content: response,
+                    timestamp: new Date(),
+                    language: this.currentLanguage
+                });
+
+                return response;
+            }
+
+            analyzeIntent(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                if (/(سعر|تكلفة|كم|ثمن|price|cost)/i.test(message)) return 'pricing';
+                if (/(لوجو|شعار|logo)/i.test(message)) return 'logo_design';
+                if (/(فيديو|video|تسويق)/i.test(message)) return 'video_production';
+                if (/(موقع|website|ويب|web)/i.test(message)) return 'website_design';
+                if (/(فكرة|idea|أفكار)/i.test(message)) return 'idea_generation';
+                if (/(عرض|باقة|package|باكج|comprehensive|full)/i.test(message)) return 'full_package';
+                if (/(دفع|payment|stc|بطاقة)/i.test(message)) return 'payment';
+                if (/(تسليم|متى|وقت|موعد|delivery)/i.test(message)) return 'delivery';
+                if (/(تعديل|مراجعة|review|تغيير)/i.test(message)) return 'revision';
+                if (/(استرجاع|refund|إلغاء|cancel)/i.test(message)) return 'refund';
+                if (/(اتصال|تحدث|كلم|contact)/i.test(message)) return 'contact';
+                if (/(مرحبا|اهلا|سلام|hello|hi)/i.test(message)) return 'greeting';
+                
+                return 'general_inquiry';
+            }
+
+            analyzeSentiment(message) {
+                const positiveWords = ['ممتاز', 'رائع', 'جميل', 'احترافي', 'شكرا', 'مشكور', 'يعطيك العافية', 'excellent', 'amazing', 'great', 'professional', 'thanks'];
+                const negativeWords = ['سيء', 'ضعيف', 'مشكلة', 'خطأ', 'غلط', 'مرفوض', 'لا يعجبني', 'bad', 'poor', 'problem', 'error', 'wrong', 'rejected'];
+                
+                let score = 0;
+                positiveWords.forEach(word => {
+                    if (message.includes(word)) score += 1;
+                });
+                negativeWords.forEach(word => {
+                    if (message.includes(word)) score -= 1;
+                });
+                
+                return score > 0 ? 'positive' : score < 0 ? 'negative' : 'neutral';
+            }
+
+            async processIntent(intent, message, context, sentiment) {
+                const responses = this.getResponsesByLanguage();
+                
+                switch (intent) {
+                    case 'pricing':
+                        return responses.pricing[Math.floor(Math.random() * responses.pricing.length)];
+                    case 'logo_design':
+                        return responses.logo_design;
+                    case 'video_production':
+                        return responses.video_production;
+                    case 'website_design':
+                        return responses.website_design;
+                    case 'idea_generation':
+                        return responses.idea_generation;
+                    case 'full_package':
+                        return responses.full_package;
+                    case 'refund':
+                        return sentiment === 'negative' ? responses.refund_negative : responses.refund;
+                    case 'greeting':
+                        return responses.greeting[Math.floor(Math.random() * responses.greeting.length)];
+                    default:
+                        return responses.general_inquiry[Math.floor(Math.random() * responses.general_inquiry.length)];
+                }
+            }
+
+            getResponsesByLanguage() {
+                if (this.currentLanguage === 'en') {
+                    return {
+                        greeting: [
+                            "Hello! 👋 I'm Graphos AI Advanced Assistant 🤖\n\n🎯 **What can I do for you today?**\n\n✨ **Our Integrated Services**:\n• Professional logo design 🎨\n• Marketing video production 🎬\n• Advanced presentations 📊\n• Website development 🌐\n• Innovative project ideas 💡\n\n💎 **Why we're the best?**\n✓ Exceptional quality\n✓ Competitive prices\n✓ On-time delivery\n✓ 24/7 technical support\n\nTell me about your project and I'll help you achieve it! 🚀",
+                            "Welcome! 🌟 Graphos AI Smart Assistant at your service!\n\n🎨 **We specialize in turning ideas into reality**:\n\n🚀 **Our Unique Features**:\n• Advanced AI technology\n• Professional creative team\n• Latest technologies and software\n• Comprehensive post-delivery support\n\n💰 **Our Prices**:\nStarting from 15 SAR with negotiation options\n\n📞 **Direct Contact**:\n• Email: Graphos.svcs@gmail.com\n• WhatsApp: +966 53 368 2916\n\nHow can I serve you today? 😊"
+                        ],
+                        pricing: [
+                            "💰 **Flexible Pricing System**:\n\n🎨 **Logo Design**: 15-40 SAR\n• 4 days: 15 SAR\n• 3 days: 20 SAR\n• 2 days: 25 SAR\n• 24 hours: 30 SAR\n• 6-7 hours: 40 SAR\n\n🎬 **Marketing Videos**: 20-50 SAR\n• 30 seconds: 20 SAR\n• 60 seconds: 30 SAR\n• 90 seconds: 40 SAR\n• 120 seconds: 50 SAR\n\n💡 **Idea Generation**: 20 SAR\n• Unique creative idea\n• Tailored to your project\n• Idea development with you\n• Delivery within 24 hours\n\n🌐 **Websites**:\n• Complete website: 1500 SAR (instead of 2000)\n\n💎 **Comprehensive Packages**:\n• 10 slides + 1min video + logo: 65 SAR\n• 20 slides + 2min video + logo: 115 SAR\n\n💡 **Important Note**:\nAll prices are negotiable based on project complexity and your specific requirements. We can offer special deals for large projects!",
+                            "🎯 **Why our prices are competitive?**\n\n✓ Unmatched exceptional quality\n✓ Professional team with long experience\n✓ Using latest technologies and software\n✓ Free technical support for 7 days\n✓ Free reviews and modifications\n\n💎 **Special Discounts**:\n• 15% discount on integrated packages\n• 10% discount for regular customers\n• Seasonal special offers\n\nWhich service interests you specifically for more details? 😊"
+                        ],
+                        logo_design: "🎨 **Professional Logo Design**:\n\n✨ **What we offer in logo design**:\n• Unique logo that represents your brand identity\n• 3 different drafts to choose from\n• Multiple files (PNG, JPG, SVG, AI)\n• Color and font guide\n• 100% ownership rights\n\n⏰ **Delivery Time**:\n• 4 days: 15 SAR\n• 3 days: 20 SAR\n• 2 days: 25 SAR\n• 24 hours: 30 SAR\n• 6-7 hours: 40 SAR\n\n💎 **Why we excel?**\n✓ Deep understanding of your brand\n✓ Design that reflects your project values\n✓ Flexibility in modifications\n✓ Unmatched quality\n\nDo you want to proceed with ordering a logo design? 🚀",
+                        video_production: "🎬 **Marketing Video Production**:\n\n✨ **What we offer in videos**:\n• Professional video in 4K quality\n• Advanced visual effects\n• Professional music and soundtracks\n• Animated and engaging texts\n• Clear and professional audio\n• Suitable for social media\n\n💰 **Prices**:\n• 30 seconds: 20 SAR\n• 60 seconds: 30 SAR\n• 90 seconds: 40 SAR\n• 120 seconds: 50 SAR\n\n⏰ **Delivery Time**: 2-5 working days\n\n🎯 **Why our videos are impactful?**\n✓ Exciting story that touches emotions\n✓ High production quality\n✓ Focus on core message\n✓ Suitable for target audience\n\nTell me about the video idea you want! 📹",
+                        website_design: "🌐 **Website Design & Development**:\n\n✨ **What we offer in website design**:\n• Responsive design for all devices\n• Search engine optimization (SEO)\n• Easy-to-use control panel\n• Integration with social media\n• Contact form and content management\n• SSL certificate for security\n\n💰 **Price**: 1500 SAR (instead of 2000 SAR)\n\n⏰ **Delivery Time**: 7-14 working days\n\n🚀 **Additional Features**:\n✓ Free hosting for 3 months\n✓ Free domain name for one year\n✓ Technical support for 30 days\n✓ Training on website usage\n\n💎 **Why we excel in website design?**\n✓ High loading speed\n✓ Exceptional user experience\n✓ Modern and attractive design\n✓ Comprehensive security and protection\n\nDo you want to start your website project? 🌟",
+                        idea_generation: "💡 **Creative Idea Generation**:\n\n✨ **What we offer in idea generation**:\n• Unique creative idea tailored to your project\n• Detailed explanation of the idea\n• Implementation suggestions\n• Competitive analysis\n• Target audience identification\n\n💰 **Price**: 20 SAR\n\n⏰ **Delivery Time**: 24 hours\n\n🚀 **What you'll get**:\n✓ Innovative project idea\n✓ Implementation roadmap\n✓ Marketing strategy suggestions\n✓ Potential challenges and solutions\n\n💎 **Why our ideas are special?**\n✓ Based on market research\n✓ Customized to your needs\n✓ Innovative and practical\n✓ Ready for implementation\n\nDo you want to get a creative idea for your project? 🚀",
+                        full_package: "💎 **Comprehensive Full Package**:\n\n✨ **What we offer in the full package**:\n• Professional logo design\n• Marketing video (up to 60 seconds)\n• Advanced presentation (10 slides)\n• Complete brand identity guide\n• Social media kit\n\n💰 **Price**: 65 SAR (Save 30% compared to individual services)\n\n⏰ **Delivery Time**: 5-10 working days\n\n🚀 **Premium Package**:\n• 20 slides + 2min video + logo: 115 SAR\n• Additional revisions and priority support\n• Extended technical support for 14 days\n\n💎 **Why choose our packages?**\n✓ Complete solution for your business\n✓ Consistent design across all materials\n✓ Significant cost savings\n✓ Faster delivery for multiple services\n\nWhich package interests you? 😊",
+                        refund: "🛡️ **Refund and Guarantee Policy**:\n\nWe believe in your complete satisfaction and provide the strongest guarantees:\n\n✅ **Complete Satisfaction Guarantee**:\n• We work with you until you get exactly what you expect\n• Unlimited free reviews\n• Modifications until complete satisfaction\n\n✅ **Refund Guarantee**:\n• Full refund if we cannot meet your requirements\n• In case of dissatisfaction after all our modification attempts\n• Without complications or complex procedures\n\n✅ **Quality Guarantee**:\n• Highest quality standards in every work\n• Thorough inspection before delivery\n• Commitment to your required specifications\n\n🎯 **Our Goal**: Your complete satisfaction and project success!",
+                        refund_negative: "😔 **First: We deeply apologize**\n\nWe understand your dissatisfaction and apologize for any shortcoming. Your satisfaction is our top priority.\n\n🛡️ **Comprehensive Refund Policy**:\n\n• If the error is from our side and we cannot meet your expectations despite attempts, we offer 100% full refund.\n• If there is misunderstanding or unclear requirements, we work to solve them with you until complete satisfaction.\n• We offer unlimited free reviews until you are satisfied with the final result.\n\n💎 **Our guarantee to you**:\n\"We work until you are 100% satisfied with the delivered work, otherwise we reclaim your work and refund your money!\"\n\n📞 **To solve your problem**:\nYou can contact the quality manager directly at: +966 53 368 2916\n\nTell me about the problem in detail and I will make sure to solve it immediately! 🚀",
+                        general_inquiry: [
+                            "🤔 **I've listened to your request!**\n\nThis sounds interesting! 🚀 Let me help you find the optimal solution.\n\n🎯 **For the best service, I need to know**:\n• The type of project you're planning\n• Expected budget\n• Required timeline\n• Any special requirements you have\n\nTell me more and I'll offer you the most suitable solution! 💎",
+                            "💡 **Great! I have several suggestions that might suit you**\n\nBased on your request, I see that these services might be ideal:\n\n🎨 **If you're starting a new project**:\n• Logo design that expresses your identity\n• Project presentation video\n• Professional presentation\n\n🌐 **If you're developing your business**:\n• Complete website\n• Marketing videos\n• Comprehensive visual identity\n\nWhich of these areas interests you more? 😊"
+                        ]
+                    };
+                } else {
+                    return {
+                        greeting: [
+                            "مرحباً بك! 👋 أنا مساعد Graphos AI المتقدم 🤖\n\n🎯 **ماذا يمكنني فعلك لك اليوم؟**\n\n✨ **خدماتنا المتكاملة**:\n• تصميم شعارات احترافية 🎨\n• إنتاج فيديوهات تسويقية 🎬\n• عروض تقديمية متطورة 📊\n• تطوير مواقع إلكترونية 🌐\n• أفكار مشاريع مبتكرة 💡\n\n💎 **لماذا نحن الأفضل؟**\n✓ جودة استثنائية\n✓ أسعار تنافسية\n✓ تسليم في الوقت المتفق عليه\n✓ دعم فني 24/7\n\nأخبرني عن مشروعك وسأساعدك في تحقيقه! 🚀",
+                            "أهلاً وسهلاً! 🌟 مساعد Graphos AI الذكي بين يديك!\n\n🎨 **نحن متخصصون في تحويل الأفكار إلى واقع**:\n\n🚀 **مميزاتنا الفريدة**:\n• استخدام الذكاء الاصطناعي المتقدم\n• فريق إبداعي محترف\n• أحدث التقنيات والبرامج\n• دعم متكامل ما بعد التسليم\n\n💰 **أسعارنا**:\nتبدأ من 15 ريال مع إمكانية التفاوض\n\n📞 **للتواصل المباشر**:\n• البريد: Graphos.svcs@gmail.com\n• واتساب: +966 53 368 2916\n\nكيف يمكنني خدمتك اليوم؟ 😊"
+                        ],
+                        pricing: [
+                            "💰 **نظام الأسعار المرن**:\n\n🎨 **تصميم الشعارات**: 15-40 ريال\n• 4 أيام: 15 ريال\n• 3 أيام: 20 ريال\n• يومين: 25 ريال\n• 24 ساعة: 30 ريال\n• 6-7 ساعات: 40 ريال\n\n🎬 **الفيديوهات التسويقية**: 20-50 ريال\n• 30 ثانية: 20 ريال\n• 60 ثانية: 30 ريال\n• 90 ثانية: 40 ريال\n• 120 ثانية: 50 ريال\n\n💡 **إعطاء فكرة**: 20 ريال\n• فكرة إبداعية فريدة\n• مناسبة لمشروعك\n• تطوير الفكرة معك\n• تسليم خلال 24 ساعة\n\n🌐 **المواقع الإلكترونية**:\n• موقع متكامل: 1500 ريال (بدلاً من 2000)\n\n💎 **الباقات الشاملة**:\n• 10 شرائح + فيديو دقيقة + شعار: 65 ريال\n• 20 شريحة + فيديو دقيقتين + شعار: 115 ريال\n\n💡 **ملاحظة مهمة**:\nجميع الأسعار قابلة للتفاوض حسب تعقيد المشروع ومتطلباتك الخاصة. يمكننا تقديم عروض خاصة للمشاريع الكبيرة!",
+                            "🎯 **لماذا أسعارنا تنافسية؟**\n\n✓ جودة استثنائية لا تضاهى\n✓ فريق محترف بخبرة طويلة\n✓ استخدام أحدث التقنيات والبرامج\n✓ دعم فني مجاني لمدة 7 أيام\n✓ مراجعات وتعديلات مجانية\n\n💎 **خصومات خاصة**:\n• 15% خصم على الباقات المتكاملة\n• 10% خصم للعملاء الدائمين\n• عروض موسمية خاصة\n\nأي خدمة تهمك تحديداً لأعطيك تفاصيل أكثر؟ 😊"
+                        ],
+                        logo_design: "🎨 **تصميم الشعارات الاحترافية**:\n\n✨ **ما نقدمه في تصميم الشعار**:\n• شعار فريد يعبر عن هوية علامتك التجارية\n• 3 مسودات مختلفة للاختيار منها\n• ملفات متعددة (PNG, JPG, SVG, AI)\n• دليل الألوان والخطوط\n• حقوق الملكية لك 100%\n\n⏰ **مدة التسليم**:\n• 4 أيام: 15 ريال\n• 3 أيام: 20 ريال\n• يومين: 25 ريال\n• 24 ساعة: 30 ريال\n• 6-7 ساعات: 40 ريال\n\n💎 **لماذا نتميز؟**\n✓ فهم عمق لعلامتك التجارية\n✓ تصميم يعبر عن قيم مشروعك\n✓ مرونة في التعديلات\n✓ جودة لا تضاهى\n\nهل تريد المضي قدماً في طلب تصميم شعار؟ 🚀",
+                        video_production: "🎬 **إنتاج الفيديوهات التسويقية**:\n\n✨ **ما نقدمه في الفيديوهات**:\n• فيديو احترافي بتقنية 4K\n• إضافة مؤثرات بصرية متقدمة\n• موسيقى وخلفيات صوتية احترافية\n• نصوص متحركة وجذابة\n• صوتيات واضحة ومحترفة\n• مناسب لوسائل التواصل الاجتماعي\n\n💰 **الأسعار**:\n• 30 ثانية: 20 ريال\n• 60 ثانية: 30 ريال\n• 90 ثانية: 40 ريال\n• 120 ثانية: 50 ريال\n\n⏰ **مدة التسليم**: 2-5 أيام عمل\n\n🎯 **لماذا فيديوهاتنا مؤثرة؟**\n✓ قصة مشوقة تلامس المشاعر\n✓ جودة إنتاج عالية\n✓ تركيز على الرسالة الأساسية\n✓ مناسب للجمهور المستهدف\n\nأخبرني عن فكرة الفيديو الذي تريده! 📹",
+                        website_design: "🌐 **تصميم المواقع الإلكترونية**:\n\n✨ **ما نقدمه في تصميم المواقع**:\n• تصميم متجاوب لجميع الأجهزة\n• تحسين محركات البحث (SEO)\n• لوحة تحكم سهلة الاستخدام\n• تكامل مع وسائل التواصل الاجتماعي\n• نموذج اتصال وإدارة محتوى\n• شهادة SSL للأمان\n\n💰 **السعر**: 1500 ريال (بدلاً من 2000 ريال)\n\n⏰ **مدة التسليم**: 7-14 يوم عمل\n\n🚀 **مميزات إضافية**:\n✓ استضافة مجانية لمدة 3 أشهر\n✓ اسم نطاق مجاني لمدة سنة\n✓ دعم فني لمدة 30 يوم\n✓ تدريب على استخدام الموقع\n\n💎 **لماذا نتميز في تصميم المواقع؟**\n✓ سرعة تحميل عالية\n✓ تجربة مستخدم متميزة\n✓ تصميم عصري وجذاب\n✓ أمان وحماية متكاملة\n\nهل تريد بدء مشروع موقعك الإلكتروني؟ 🌟",
+                        idea_generation: "💡 **إعطاء فكرة إبداعية**:\n\n✨ **ما نقدمه في خدمة إعطاء الفكرة**:\n• فكرة إبداعية فريدة مناسبة لمشروعك\n• شرح مفصل للفكرة\n• اقتراحات للتنفيذ\n• تحليل المنافسين\n• تحديد الجمهور المستهدف\n\n💰 **السعر**: 20 ريال\n\n⏰ **مدة التسليم**: 24 ساعة\n\n🚀 **ما ستحصل عليه**:\n✓ فكرة مشروع مبتكرة\n✓ خارطة طريق للتنفيذ\n✓ اقتراحات استراتيجية تسويقية\n✓ التحديات المحتملة وحلولها\n\n💎 **لماذا أفكارنا مميزة؟**\n✓ مبنية على دراسة السوق\n✓ مخصصة لاحتياجاتك\n✓ مبتكرة وقابلة للتنفيذ\n✓ جاهزة للتطبيق\n\nهل تريد الحصول على فكرة إبداعية لمشروعك؟ 🚀",
+                        full_package: "💎 **الباقة الشاملة المتكاملة**:\n\n✨ **ما نقدمه في الباقة الشاملة**:\n• تصميم شعار احترافي\n• فيديو تسويقي (حتى 60 ثانية)\n• عرض تقديمي متطور (10 شرائح)\n• دليل هوية بصرية متكامل\n• حزمة وسائل التواصل الاجتماعي\n\n💰 **السعر**: 65 ريال (وفر 30% مقارنة بالخدمات الفردية)\n\n⏰ **مدة التسليم**: 5-10 أيام عمل\n\n🚀 **الباقة المميزة**:\n• 20 شريحة + فيديو دقيقتين + شعار: 115 ريال\n• مراجعات إضافية ودعم مميز\n• دعم فني ممتد لمدة 14 يوم\n\n💎 **لماذا تختار باقاتنا؟**\n✓ حل متكامل لعملك\n✓ تصميم متناسق عبر جميع المواد\n✓ توفير كبير في التكلفة\n✓ تسليم أسرع للخدمات المتعددة\n\nأي باقة تهمك؟ 😊",
+                        refund: "🛡️ **سياسة الاسترجاع والضمان**:\n\nنحن نؤمن برضاك التام ونقدم أقوى الضمانات:\n\n✅ **ضمان الرضا التام**:\n• نعمل معك حتى تحصل على ما تتوقعه بالضبط\n• مراجعات مجانية غير محدودة\n• تعديلات حتى الرضا الكامل\n\n✅ **ضمان الاسترجاع**:\n• استرجاع كامل للمبلغ إذا لم نستطع تلبية متطلباتك\n• في حال عدم الرضا بعد كل محاولاتنا للتعديل\n• بدون تعقيدات أو إجراءات معقدة\n\n✅ **ضمان الجودة**:\n• أعلى معايير الجودة في كل عمل\n• فحص دقيق قبل التسليم\n• التزام بمواصفاتك المطلوبة\n\n🎯 **هدفنا**: رضاك التام ونجاح مشروعك!",
+                        refund_negative: "😔 **أولاً: نعتذر بشدة**\n\nنحن نتفهم استياءك ونعتذر عن أي تقصير. رضاك هو أهم أولوياتنا.\n\n🛡️ **سياسة الاسترجاع الشاملة**:\n\n• إذا كان الخطأ من جهتنا ولم نستطع تلبية توقعاتك رغم المحاولات، نقدم استرجاع كامل 100%.\n• إذا كان هناك سوء فهم أو متطلبات غير واضحة، نعمل على حلها معك حتى الرضا التام.\n• نقدم مراجعات مجانية غير محدودة حتى ترضى عن النتيجة النهائية.\n\n💎 **ضماننا لك**:\n\"نعمل حتى ترضى 100% عن العمل المُسلم، وإلا نستعيد عملك ونسترجع مالك!\"\n\n📞 **لحل مشكلتك**:\nيمكنك التواصل مع مدير الجودة مباشرة على: +966 53 368 2916\n\nأخبرني بالمشكلة بالتفصيل وسأحرص على حلها فوراً! 🚀",
+                        general_inquiry: [
+                            "🤔 **لقد استمعت لطلبك!**\n\nهذا يبدو مثيراً للاهتمام! 🚀 دعني أساعدك في العثور على الحل الأمثل.\n\n🎯 **لأفضل خدمة، أحتاج معرفة**:\n• نوع المشروع الذي تخطط له\n• الميزانية المتوقعة\n• الجدول الزمني المطلوب\n• أي متطلبات خاصة لديك\n\nأخبرني بالمزيد وسأقدم لك الحل الأنسب! 💎",
+                            "💡 **رائع! لدي عدة اقتراحات قد تناسبك**\n\nبناءً على طلبك، أرى أن هذه الخدمات قد تكون مثالية:\n\n🎨 **إذا كنت تبدأ مشروعاً جديداً**:\n• تصميم شعار يعبر عن هويتك\n• فيديو تقديمي للمشروع\n• عرض تقديمي احترافي\n\n🌐 **إذا كنت تطور عملك**:\n• موقع إلكتروني متكامل\n• فيديوهات تسويقية\n• هوية بصرية متكاملة\n\nأي من هذه المجالات تهمك أكثر؟ 😊"
+                        ]
+                    };
+                }
+            }
+        }
+
+        let advancedAI;
+
+        async function initializeEnhancedSystem() {
+            await showEnhancedLoading();
+            advancedAI = new AdvancedAI();
+            initializeEnhancedAI();
+            initNavigation();
+            initServices();
+            initLanguageSystem();
+            initFAQ();
+            updateYear();
+            initAdminPanel();
+            loadSavedImages();
+            
+            setTimeout(() => {
+                showNotification('تم تحميل المنصة بنجاح! 🚀', 'success');
+            }, 1000);
+        }
+
+        async function showEnhancedLoading() {
+            const loader = document.getElementById('loadingScreen');
+            const loaderText = document.getElementById('loaderText');
+            const loadingBar = document.getElementById('loadingBar');
+            const loadingPercent = document.getElementById('loadingPercent');
+            const loadingStep = document.getElementById('loadingStep');
+
+            createLoadingParticles();
+
+            // تحميل أسرع
+            const steps = [
+                { text: 'Loading core components...', ar: 'جاري تحميل المكونات الأساسية...', duration: 200 },
+                { text: 'Initializing advanced UI...', ar: 'جاري تهيئة واجهة المستخدم المتقدمة...', duration: 150 },
+                { text: 'Loading advanced AI system...', ar: 'جاري تحميل نظام الذكاء الاصطناعي المتقدم...', duration: 200 }
+            ];
+
+            let totalProgress = 0;
+            
+            for (let i = 0; i < steps.length; i++) {
+                if (loaderText) {
+                    loaderText.textContent = steps[i].ar;
+                    loaderText.setAttribute('data-ar', steps[i].ar);
+                    loaderText.setAttribute('data-en', steps[i].text);
+                }
+                if (loadingStep) {
+                    loadingStep.textContent = steps[i].ar;
+                    loadingStep.setAttribute('data-ar', steps[i].ar);
+                    loadingStep.setAttribute('data-en', steps[i].text);
+                }
+                
+                const targetProgress = ((i + 1) / steps.length) * 100;
+                while (totalProgress < targetProgress) {
+                    totalProgress += 5; // زيادة أسرع
+                    if (loadingBar) loadingBar.style.width = totalProgress + '%';
+                    if (loadingPercent) loadingPercent.textContent = Math.round(totalProgress) + '%';
+                    await new Promise(resolve => setTimeout(resolve, 5)); // وقت أقل
+                }
+                
+                await new Promise(resolve => setTimeout(resolve, steps[i].duration));
+            }
+
+            // إخفاء شاشة التحميل بسرعة
+            setTimeout(() => {
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        if (loader) loader.style.display = 'none';
+                    }, 200);
+                }
+            }, 200);
+        }
+
+        function createLoadingParticles() {
+            const container = document.getElementById('loadingParticles');
+            if (!container) return;
+
+            const particleCount = 15; // عدد أقل للسرعة
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 3 + 's'; // وقت أقل
+                
+                const size = 2 + Math.random() * 3;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                particle.style.opacity = 0.3 + Math.random() * 0.7;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // ===== ADMIN PANEL SYSTEM =====
+        function initAdminPanel() {
+            const logoContainer = document.getElementById('logoContainer');
+            if (logoContainer) {
+                let clickCount = 0;
+                let clickTimer;
+                
+                logoContainer.addEventListener('click', function() {
+                    clickCount++;
+                    
+                    if (clickCount === 1) {
+                        clickTimer = setTimeout(function() {
+                            clickCount = 0;
+                        }, 500);
+                    } else if (clickCount === 2) {
+                        clearTimeout(clickTimer);
+                        clickCount = 0;
+                        showAdminPanel();
+                    }
+                });
+            }
+        }
+
+        function showAdminPanel() {
+            const password = prompt('أدخل رمز الإدارة:');
+            if (password === 'GraphosFRSVCS17') {
+                createAdminPanel();
+            } else {
+                alert('رمز الإدارة غير صحيح');
+            }
+        }
+
+        function createAdminPanel() {
+            const adminPanel = document.createElement('div');
+            adminPanel.className = 'admin-panel';
+            adminPanel.innerHTML = `
+                <div class="admin-content">
+                    <h2>لوحة تحكم المطور</h2>
+                    
+                    <div class="admin-section">
+                        <h3>تعديل صورة الشعار</h3>
+                        <input type="file" id="logoUpload" accept="image/*" class="admin-input">
+                        <button class="admin-btn" onclick="updateLogo()">تحديث الشعار</button>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h3>تعديل صور الخدمات</h3>
+                        <div id="servicesImagesUpload">
+                            <!-- سيتم إضافة حقول رفع الصور للخدمات هنا ديناميكياً -->
+                        </div>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h3>إدارة النظام</h3>
+                        <button class="admin-btn" onclick="clearAllImages()">مسح جميع الصور</button>
+                        <button class="admin-btn danger" onclick="this.closest('.admin-panel').remove()">إغلاق</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(adminPanel);
+            
+            // تحميل الخدمات وإضافة حقول رفع الصور لكل خدمة
+            const services = [
+                { id: 1, name_ar: 'تصميم الشعارات الاحترافية', name_en: 'Professional Logo Design' },
+                { id: 2, name_ar: 'إنتاج الفيديوهات التسويقية', name_en: 'Marketing Video Production' },
+                { id: 3, name_ar: 'العروض التقديمية المتطورة', name_en: 'Advanced Presentations' },
+                { id: 4, name_ar: 'تصميم المواقع الإلكترونية', name_en: 'Website Design' },
+                { id: 5, name_ar: 'الباقة الشاملة المتكاملة', name_en: 'Comprehensive Full Package' },
+                { id: 6, name_ar: 'إعطاء فكرة', name_en: 'Idea Generation' }
+            ];
+
+            const servicesContainer = document.getElementById('servicesImagesUpload');
+            const currentLang = document.documentElement.lang;
+
+            services.forEach(service => {
+                const serviceDiv = document.createElement('div');
+                serviceDiv.className = 'service-upload';
+                serviceDiv.innerHTML = `
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">${currentLang === 'ar' ? service.name_ar : service.name_en}</label>
+                    <input type="file" id="serviceImageUpload-${service.id}" accept="image/*" class="admin-input">
+                    <button class="admin-btn" onclick="updateServiceImage(${service.id})">تحديث الصورة</button>
+                `;
+                servicesContainer.appendChild(serviceDiv);
+            });
+
+            // إغلاق النافذة عند النقر خارجها
+            adminPanel.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.remove();
+                }
+            });
+        }
+
+        function updateLogo() {
+            const fileInput = document.getElementById('logoUpload');
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // حفظ الصورة في localStorage
+                    localStorage.setItem('graphosLogo', e.target.result);
+                    // تحديث الشعار في الواجهة
+                    const logoPlaceholder = document.getElementById('logoPlaceholder');
+                    if (logoPlaceholder) {
+                        logoPlaceholder.innerHTML = `<img src="${e.target.result}" alt="Graphos Services Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">`;
+                    }
+                    showNotification('تم تحديث الشعار بنجاح!', 'success');
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                alert('يرجى اختيار صورة للشعار');
+            }
+        }
+
+        function updateServiceImage(serviceId) {
+            const fileInput = document.getElementById(`serviceImageUpload-${serviceId}`);
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // حفظ صورة الخدمة في localStorage
+                    localStorage.setItem(`graphosServiceImage-${serviceId}`, e.target.result);
+                    // تحديث صورة الخدمة في الواجهة
+                    const serviceCard = document.querySelector(`.service-card[data-service="${serviceId}"]`);
+                    if (serviceCard) {
+                        const serviceImage = serviceCard.querySelector('.service-image');
+                        if (serviceImage) {
+                            serviceImage.src = e.target.result;
+                        }
+                    }
+                    showNotification('تم تحديث صورة الخدمة بنجاح!', 'success');
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                alert('يرجى اختيار صورة للخدمة');
+            }
+        }
+
+        function clearAllImages() {
+            if (confirm('هل أنت متأكد من مسح جميع الصور المحفوظة؟')) {
+                // مسح صورة الشعار
+                localStorage.removeItem('graphosLogo');
+                const logoPlaceholder = document.getElementById('logoPlaceholder');
+                if (logoPlaceholder) {
+                    logoPlaceholder.innerHTML = 'G';
+                }
+                
+                // مسح صور الخدمات
+                for (let i = 1; i <= 6; i++) {
+                    localStorage.removeItem(`graphosServiceImage-${i}`);
+                    const serviceCard = document.querySelector(`.service-card[data-service="${i}"]`);
+                    if (serviceCard) {
+                        const serviceImage = serviceCard.querySelector('.service-image');
+                        if (serviceImage) {
+                            // إعادة تعيين الصورة الافتراضية
+                            const defaultImages = [
+                                'https://images.unsplash.com/photo-1634942537034-2531766767d1?w=400&h=250&fit=crop',
+                                'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=250&fit=crop',
+                                'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=400&h=250&fit=crop',
+                                'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=400&h=250&fit=crop',
+                                'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=250&fit=crop',
+                                'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=250&fit=crop'
+                            ];
+                            serviceImage.src = defaultImages[i-1];
+                        }
+                    }
+                }
+                
+                showNotification('تم مسح جميع الصور بنجاح!', 'success');
+            }
+        }
+
+        function loadSavedImages() {
+            // تحميل صورة الشعار
+            const savedLogo = localStorage.getItem('graphosLogo');
+            if (savedLogo) {
+                const logoPlaceholder = document.getElementById('logoPlaceholder');
+                if (logoPlaceholder) {
+                    logoPlaceholder.innerHTML = `<img src="${savedLogo}" alt="Graphos Services Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">`;
+                }
+            }
+
+            // تحميل صور الخدمات
+            for (let i = 1; i <= 6; i++) {
+                const savedServiceImage = localStorage.getItem(`graphosServiceImage-${i}`);
+                if (savedServiceImage) {
+                    const serviceCard = document.querySelector(`.service-card[data-service="${i}"]`);
+                    if (serviceCard) {
+                        const serviceImage = serviceCard.querySelector('.service-image');
+                        if (serviceImage) {
+                            serviceImage.src = savedServiceImage;
+                        }
+                    }
+                }
+            }
+        }
+
+        // ===== LANGUAGE SYSTEM =====
+        function initLanguageSystem() {
+            const languageSwitcher = document.getElementById('languageSwitcher');
+            if (languageSwitcher) {
+                languageSwitcher.addEventListener('click', function() {
+                    const currentLang = document.documentElement.lang;
+                    const newLang = currentLang === 'ar' ? 'en' : 'ar';
+                    switchLanguage(newLang);
+                });
+            }
+        }
+
+        function switchLanguage(lang) {
+            // تحديث سمة اللغة في المستند
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            // تحديث الذكاء الاصطناعي
+            if (advancedAI) {
+                advancedAI.setLanguage(lang);
+            }
+            
+            // تحديث جميع النصوص
+            updateAllTexts(lang);
+            
+            // تحديث زر المحول
+            const languageSwitcher = document.getElementById('languageSwitcher');
+            if (languageSwitcher) {
+                const span = languageSwitcher.querySelector('span');
+                if (span) {
+                    span.textContent = lang === 'ar' ? 'English' : 'العربية';
+                    span.setAttribute('data-ar', 'English');
+                    span.setAttribute('data-en', 'العربية');
+                }
+            }
+            
+            showNotification(
+                lang === 'ar' ? 'تم التبديل إلى اللغة العربية' : 'Switched to English',
+                'info'
+            );
+        }
+
+        function updateAllTexts(lang) {
+            // تحديث جميع العناصر التي تحتوي على بيانات اللغة
+            const elements = document.querySelectorAll('[data-ar], [data-en]');
+            elements.forEach(element => {
+                const text = lang === 'ar' ? element.getAttribute('data-ar') : element.getAttribute('data-en');
+                if (text) {
+                    // التحقق إذا كان العنصر يحتوي على HTML
+                    if (text.includes('<')) {
+                        element.innerHTML = text;
+                    } else {
+                        element.textContent = text;
+                    }
+                }
+            });
+            
+            // تحديث العناصر الخاصة
+            updatePlaceholders(lang);
+            updateServiceContent(lang);
+        }
+
+        function updatePlaceholders(lang) {
+            const placeholders = document.querySelectorAll('[data-ar-placeholder], [data-en-placeholder]');
+            placeholders.forEach(element => {
+                const placeholder = lang === 'ar' ? 
+                    element.getAttribute('data-ar-placeholder') : 
+                    element.getAttribute('data-en-placeholder');
+                if (placeholder) {
+                    element.setAttribute('placeholder', placeholder);
+                }
+            });
+        }
+
+        function updateServiceContent(lang) {
+            // إعادة تحميل الخدمات باللغة الجديدة
+            initServices();
+        }
+
+        // ===== ENHANCED AI ASSISTANT =====
+        function initializeEnhancedAI() {
+            const aiToggle = document.getElementById('aiToggle');
+            const aiChatbot = document.getElementById('aiChatbot');
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendMessage');
+            const heroAiButton = document.getElementById('heroAiButton');
+
+            // إصلاح مشكلة فتح البوت
+            if (aiToggle) {
+                aiToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleChatbot();
+                });
+            }
+
+            // زر البوت في الـ Hero section
+            if (heroAiButton) {
+                heroAiButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleChatbot();
+                });
+            }
+
+            // إرسال الرسالة عند الضغط على Enter
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendEnhancedMessage();
+                    }
+                });
+            }
+
+            if (sendButton) {
+                sendButton.addEventListener('click', sendEnhancedMessage);
+            }
+
+            // رقائق الاقتراحات
+            document.querySelectorAll('.suggestion-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    const message = this.getAttribute('data-msg');
+                    if (chatInput) {
+                        chatInput.value = message;
+                        sendEnhancedMessage();
+                    }
+                });
+            });
+
+            // الأزرار السريعة
+            document.querySelectorAll('.quick-btn').forEach(btn => {
+                if (!btn.onclick) {
+                    btn.addEventListener('click', function() {
+                        const message = this.getAttribute('data-msg');
+                        if (message && chatInput) {
+                            chatInput.value = message;
+                            sendEnhancedMessage();
+                        }
+                    });
+                }
+            });
+
+            // منع إغلاق الدردشة عند النقر داخلها
+            if (aiChatbot) {
+                aiChatbot.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+
+            // إغلاق الدردشة عند النقر خارجها
+            document.addEventListener('click', function() {
+                if (aiChatbot) {
+                    aiChatbot.classList.remove('active');
+                }
+            });
+
+            // إصلاح مشكلة الأزرار الأخرى
+            const closeChat = document.getElementById('closeChat');
+            const clearChat = document.getElementById('clearChat');
+            const voiceToggle = document.getElementById('voiceToggle');
+
+            if (closeChat) {
+                closeChat.addEventListener('click', function() {
+                    if (aiChatbot) aiChatbot.classList.remove('active');
+                });
+            }
+
+            if (clearChat) {
+                clearChat.addEventListener('click', clearChatHistory);
+            }
+
+            if (voiceToggle) {
+                voiceToggle.addEventListener('click', toggleVoiceRecognition);
+            }
+        }
+
+        function toggleChatbot() {
+            const aiChatbot = document.getElementById('aiChatbot');
+            const chatInput = document.getElementById('chatInput');
+            
+            if (aiChatbot) {
+                const isActive = aiChatbot.classList.contains('active');
+                
+                if (!isActive) {
+                    aiChatbot.classList.add('active');
+                    if (chatInput) chatInput.focus();
+                    showNotification(
+                        document.documentElement.lang === 'ar' ? 
+                        'مرحباً بك في مساعد Graphos AI الذكي! 🤖' : 
+                        'Welcome to Graphos AI Smart Assistant! 🤖', 
+                        'info'
+                    );
+                } else {
+                    aiChatbot.classList.remove('active');
+                }
+            }
+        }
+
+        async function sendEnhancedMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput ? chatInput.value.trim() : '';
+            
+            if (!message) return;
+
+            addEnhancedChatMessage(message, 'user');
+            if (chatInput) chatInput.value = '';
+
+            showEnhancedTypingIndicator();
+
+            try {
+                const response = await advancedAI.generateResponse(message);
+                hideEnhancedTypingIndicator();
+                addEnhancedChatMessage(response, 'bot');
+                
+            } catch (error) {
+                hideEnhancedTypingIndicator();
+                addEnhancedChatMessage(
+                    document.documentElement.lang === 'ar' ? 
+                    'عذراً، حدث خطأ في النظام. يرجى المحاولة مرة أخرى.' : 
+                    'Sorry, a system error occurred. Please try again.', 
+                    'bot'
+                );
+            }
+        }
+
+        function addEnhancedChatMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            if (!messagesContainer) return;
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const timestamp = new Date().toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-${sender === 'bot' ? 'robot' : 'user'}"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-text">${formatMessage(text)}</div>
+                    <div class="message-time">${timestamp}</div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            saveEnhancedChatHistory();
+        }
+
+        function formatMessage(text) {
+            return text.replace(/\n/g, '<br>')
+                       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                       .replace(/\*(.*?)\*/g, '<em>$1</em>');
+        }
+
+        function showEnhancedTypingIndicator() {
+            const messagesContainer = document.getElementById('chatMessages');
+            if (!messagesContainer) return;
+
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message typing';
+            typingDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <span style="margin-right: 8px; color: #666; font-size: 0.9rem;">${document.documentElement.lang === 'ar' ? 'يكتب رداً...' : 'Typing...'}</span>
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideEnhancedTypingIndicator() {
+            const typingIndicator = document.querySelector('.typing');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function toggleVoiceRecognition() {
+            const voiceBtn = document.getElementById('voiceToggle');
+            if (!voiceBtn) return;
+
+            const isListening = voiceBtn.classList.contains('listening');
+            
+            if (!isListening) {
+                voiceBtn.classList.add('listening');
+                voiceBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                showNotification(
+                    document.documentElement.lang === 'ar' ? 
+                    'جاري الاستماع... تحدث الآن' : 
+                    'Listening... Speak now', 
+                    'info'
+                );
+                
+                setTimeout(() => {
+                    const voiceCommands = document.documentElement.lang === 'ar' ? [
+                        "أريد تصميم شعار لشركتي الجديدة",
+                        "كم سعر تصميم فيديو تسويقي",
+                        "أحتاج عرض أسعار كامل للخدمات",
+                        "كيف يمكنني الدفع عبر STC Pay",
+                        "ما هي مدة تسليم العروض التقديمية"
+                    ] : [
+                        "I want to design a logo for my new company",
+                        "How much does marketing video design cost",
+                        "I need a complete price quote for services",
+                        "How can I pay via STC Pay",
+                        "What is the delivery time for presentations"
+                    ];
+                    
+                    const randomCommand = voiceCommands[Math.floor(Math.random() * voiceCommands.length)];
+                    
+                    const chatInput = document.getElementById('chatInput');
+                    if (chatInput) chatInput.value = randomCommand;
+                    voiceBtn.classList.remove('listening');
+                    voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                    sendEnhancedMessage();
+                }, 3000);
+            } else {
+                voiceBtn.classList.remove('listening');
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                showNotification(
+                    document.documentElement.lang === 'ar' ? 
+                    'تم إيقاف الاستماع' : 
+                    'Stopped listening', 
+                    'info'
+                );
+            }
+        }
+
+        function clearChatHistory() {
+            const messagesContainer = document.getElementById('chatMessages');
+            if (!messagesContainer) return;
+
+            const welcomeMessage = document.documentElement.lang === 'ar' ? 
+                `<strong>مرحباً! 👋 أنا مساعد Graphos AI المتقدم 🤖</strong><br><br>🎯 <strong>ماذا يمكنني فعلك لك؟</strong><br>• تصميم شعارات احترافية 🎨<br>• إنتاج فيديوهات تسويقية 🎬<br>• عروض تقديمية متطورة 📊<br>• تطوير مواقع إلكترونية 🌐<br>• أفكار مشاريع مبتكرة 💡<br><br>💎 <strong>مميزاتنا:</strong><br>✓ أسعار تنافسية<br>✓ جودة استثنائية<br>✓ تسليم في الوقت المتفق عليه<br>✓ دعم فني 24/7<br><br>أخبرني عن مشروعك وسأساعدك في تحقيقه! 🚀` :
+                `<strong>Hello! 👋 I'm Graphos AI Advanced Assistant 🤖</strong><br><br>🎯 <strong>What can I do for you?</strong><br>• Professional logo design 🎨<br>• Marketing video production 🚀<br>• Advanced presentations 📊<br>• Website development 🌐<br>• Innovative project ideas 💡<br><br>💎 <strong>Our Features:</strong><br>✓ Competitive prices<br>✓ Exceptional quality<br>✓ Delivery on time<br>✓ 24/7 technical support<br><br>Tell me about your project and I'll help you achieve it! 🚀`;
+
+            messagesContainer.innerHTML = `
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${welcomeMessage}</div>
+                        <div class="message-time">${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+                    </div>
+                </div>
+            `;
+            showNotification(
+                document.documentElement.lang === 'ar' ? 
+                'تم مسح محادثة الدردشة' : 
+                'Chat conversation cleared', 
+                'success'
+            );
+        }
+
+        function saveEnhancedChatHistory() {
+            const messagesContainer = document.getElementById('chatMessages');
+            if (messagesContainer) {
+                const messages = messagesContainer.innerHTML;
+                localStorage.setItem('graphosChatHistory', messages);
+                localStorage.setItem('graphosChatLanguage', document.documentElement.lang);
+            }
+        }
+
+        function loadEnhancedChatHistory() {
+            const savedHistory = localStorage.getItem('graphosChatHistory');
+            const savedLanguage = localStorage.getItem('graphosChatLanguage');
+            
+            if (savedHistory && savedLanguage === document.documentElement.lang) {
+                const messagesContainer = document.getElementById('chatMessages');
+                if (messagesContainer) {
+                    messagesContainer.innerHTML = savedHistory;
+                }
+            }
+        }
+
+        // ===== NOTIFICATION SYSTEM =====
+        function showNotification(message, type = 'info', duration = 5000) {
+            const notificationSystem = document.getElementById('notificationSystem');
+            if (!notificationSystem) return;
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                warning: 'fas fa-exclamation-triangle',
+                info: 'fas fa-info-circle'
+            };
+            
+            notification.innerHTML = `
+                <i class="${icons[type]}" style="color: ${getNotificationColor(type)}; font-size: 1.5rem;"></i>
+                <div style="flex: 1;">
+                    <div style="font-weight: 700; margin-bottom: 0.3rem;">${getNotificationTitle(type)}</div>
+                    <div style="font-size: 0.95rem; opacity: 0.9;">${message}</div>
+                </div>
+                <button onclick="this.parentElement.remove()" style="background: none; border: none; color: #666; cursor: pointer; padding: 5px;">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            notificationSystem.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.animation = 'slideInRight 0.5s ease reverse';
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.remove();
+                        }
+                    }, 500);
+                }
+            }, duration);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#27ae60',
+                error: '#e74c3c',
+                warning: '#f39c12',
+                info: '#3498db'
+            };
+            return colors[type];
+        }
+
+        function getNotificationTitle(type) {
+            const titles = {
+                success: document.documentElement.lang === 'ar' ? 'تم بنجاح' : 'Success',
+                error: document.documentElement.lang === 'ar' ? 'خطأ' : 'Error',
+                warning: document.documentElement.lang === 'ar' ? 'تحذير' : 'Warning',
+                info: document.documentElement.lang === 'ar' ? 'معلومة' : 'Info'
+            };
+            return titles[type];
+        }
+
+        // ===== SERVICES SYSTEM =====
+        function initServices() {
+            const servicesGrid = document.getElementById('servicesGrid');
+            if (!servicesGrid) return;
+
+            const services = [
+                {
+                    id: 1,
+                    name_ar: 'تصميم الشعارات الاحترافية',
+                    name_en: 'Professional Logo Design',
+                    icon: 'fas fa-palette',
+                    description_ar: 'تصميم شعارات فريدة تعبر عن هوية علامتك التجارية بدقة وإبداع',
+                    description_en: 'Unique logo designs that perfectly represent your brand identity',
+                    image: 'https://images.unsplash.com/photo-1634942537034-2531766767d1?w=400&h=250&fit=crop',
+                    pricing: [
+                        { duration_ar: '4 أيام', duration_en: '4 days', price: 15 },
+                        { duration_ar: '3 أيام', duration_en: '3 days', price: 20 },
+                        { duration_ar: 'يومين', duration_en: '2 days', price: 25 },
+                        { duration_ar: '24 ساعة', duration_en: '24 hours', price: 30 },
+                        { duration_ar: '6-7 ساعات', duration_en: '6-7 hours', price: 40 }
+                    ],
+                    features_ar: ['3 مسودات مختلفة', 'ملفات متعددة (PNG, JPG, SVG, AI)', 'دليل الألوان والخطوط', 'حقوق الملكية 100%'],
+                    features_en: ['3 different drafts', 'Multiple files (PNG, JPG, SVG, AI)', 'Color and font guide', '100% ownership rights']
+                },
+                {
+                    id: 2,
+                    name_ar: 'إنتاج الفيديوهات التسويقية',
+                    name_en: 'Marketing Video Production',
+                    icon: 'fas fa-video',
+                    description_ar: 'إنتاج فيديوهات إبداعية عالية الجودة لتسويق منتجاتك وخدماتك',
+                    description_en: 'Creative high-quality video production for marketing your products and services',
+                    image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=250&fit=crop',
+                    pricing: [
+                        { duration_ar: '30 ثانية', duration_en: '30 seconds', price: 20 },
+                        { duration_ar: '60 ثانية', duration_en: '60 seconds', price: 30 },
+                        { duration_ar: '90 ثانية', duration_en: '90 seconds', price: 40 },
+                        { duration_ar: '120 ثانية', duration_en: '120 seconds', price: 50 }
+                    ],
+                    features_ar: ['جودة 4K', 'مؤثرات بصرية متقدمة', 'موسيقى احترافية', 'نصوص متحركة'],
+                    features_en: ['4K quality', 'Advanced visual effects', 'Professional music', 'Animated texts']
+                },
+                {
+                    id: 3,
+                    name_ar: 'العروض التقديمية المتطورة',
+                    name_en: 'Advanced Presentations',
+                    icon: 'fas fa-desktop',
+                    description_ar: 'تصميم عروض تقديمية احترافية وجذابة تعزز رسالتك وتؤثر في جمهورك',
+                    description_en: 'Professional and engaging presentation designs that enhance your message and impact your audience',
+                    image: 'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=400&h=250&fit=crop',
+                    pricing: [
+                        { duration_ar: '10 شرائح', duration_en: '10 slides', price: 15 },
+                        { duration_ar: '20 شريحة', duration_en: '20 slides', price: 25 },
+                        { duration_ar: '30 شريحة', duration_en: '30 slides', price: 35 },
+                        { duration_ar: 'مخصص', duration_en: 'Custom', price: 50 }
+                    ],
+                    features_ar: ['تصميم احترافي', 'رسوم بيانية متحركة', 'قوالب مبتكرة', 'توافق مع جميع الأجهزة'],
+                    features_en: ['Professional design', 'Animated charts', 'Innovative templates', 'Compatible with all devices']
+                },
+                {
+                    id: 4,
+                    name_ar: 'تصميم المواقع الإلكترونية',
+                    name_en: 'Website Design',
+                    icon: 'fas fa-code',
+                    description_ar: 'تصميم وتطوير مواقع إلكترونية متكاملة متجاوبة مع جميع الأجهزة',
+                    description_en: 'Complete website design and development responsive to all devices',
+                    image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=400&h=250&fit=crop',
+                    pricing: [
+                        { duration_ar: 'موقع متكامل', duration_en: 'Complete website', price: 1500, original_price: 2000 }
+                    ],
+                    features_ar: ['تصميم متجاوب', 'تحسين محركات البحث', 'لوحة تحكم سهلة', 'شهادة SSL'],
+                    features_en: ['Responsive design', 'SEO optimization', 'Easy control panel', 'SSL certificate']
+                },
+                {
+                    id: 5,
+                    name_ar: 'الباقة الشاملة المتكاملة',
+                    name_en: 'Comprehensive Full Package',
+                    icon: 'fas fa-gem',
+                    description_ar: 'حزمة متكاملة تشمل شعار، فيديو، وعرض تقديمي بخصم خاص',
+                    description_en: 'Complete package including logo, video, and presentation with special discount',
+                    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=250&fit=crop',
+                    pricing: [
+                        { duration_ar: 'شعار + فيديو 60ث + 10 شرائح', duration_en: 'Logo + 60s video + 10 slides', price: 65 },
+                        { duration_ar: 'شعار + فيديو 120ث + 20 شرائح', duration_en: 'Logo + 120s video + 20 slides', price: 115 }
+                    ],
+                    features_ar: ['توفير 30%', 'تصميم متناسق', 'تسليم أسرع', 'دعم مميز'],
+                    features_en: ['Save 30%', 'Consistent design', 'Faster delivery', 'Premium support']
+                },
+                {
+                    id: 6,
+                    name_ar: 'إعطاء فكرة',
+                    name_en: 'Idea Generation',
+                    icon: 'fas fa-lightbulb',
+                    description_ar: 'تقديم أفكار إبداعية ومبتكرة لمشاريعك وعلامتك التجارية',
+                    description_en: 'Providing creative and innovative ideas for your projects and brand',
+                    image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=250&fit=crop',
+                    pricing: [
+                        { duration_ar: 'فكرة واحدة', duration_en: 'One idea', price: 20 }
+                    ],
+                    features_ar: ['فكرة إبداعية فريدة', 'مناسبة لمشروعك', 'تطوير الفكرة معك', 'تسليم خلال 24 ساعة'],
+                    features_en: ['Unique creative idea', 'Tailored to your project', 'Idea development with you', 'Delivery within 24 hours']
+                }
+            ];
+
+            const currentLang = document.documentElement.lang;
+            
+            servicesGrid.innerHTML = services.map(service => `
+                <div class="service-card" data-service="${service.id}">
+                    <div class="service-icon">
+                        <i class="${service.icon}"></i>
+                    </div>
+                    <img src="${service.image}" alt="${currentLang === 'ar' ? service.name_ar : service.name_en}" class="service-image">
+                    <h3>${currentLang === 'ar' ? service.name_ar : service.name_en}</h3>
+                    <p>${currentLang === 'ar' ? service.description_ar : service.description_en}</p>
+                    
+                    <div class="service-features">
+                        ${service.features_ar.map((feature, index) => `
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>${currentLang === 'ar' ? feature : service.features_en[index]}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <table class="pricing-table">
+                        <thead>
+                            <tr>
+                                <th>${currentLang === 'ar' ? 'مدة التسليم' : 'Delivery Time'}</th>
+                                <th>${currentLang === 'ar' ? 'السعر' : 'Price'}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${service.pricing.map(item => `
+                                <tr>
+                                    <td>${currentLang === 'ar' ? item.duration_ar : item.duration_en}</td>
+                                    <td>
+                                        <span class="price">${item.price} ${currentLang === 'ar' ? 'ريال' : 'SAR'}</span>
+                                        ${item.original_price ? `<span class="original-price">${item.original_price} ${currentLang === 'ar' ? 'ريال' : 'SAR'}</span>` : ''}
+                                    </td>
+                                    <td>
+                                        <button class="add-to-cart" onclick="addToCart(${service.id}, '${currentLang === 'ar' ? item.duration_ar : item.duration_en}', ${item.price})">
+                                            <i class="fas fa-shopping-cart"></i>
+                                            ${currentLang === 'ar' ? 'اطلب الآن' : 'Order Now'}
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    
+                    ${service.id !== 4 && service.id !== 5 && service.id !== 6 ? `
+                        <span class="negotiable">
+                            <i class="fas fa-handshake"></i>
+                            ${currentLang === 'ar' ? 'جميع الأسعار قابلة للتفاوض حسب تعقيد المشروع' : 'All prices are negotiable based on project complexity'}
+                        </span>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // ===== NAVIGATION SYSTEM =====
+        function initNavigation() {
+            const header = document.getElementById('mainHeader');
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            
+            // تأثير التمرير على الهيدر
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+                
+                // تفعيل الروابط النشطة
+                const scrollPos = window.scrollY + 100;
+                
+                navLinks.forEach(link => {
+                    const section = document.querySelector(link.getAttribute('href'));
+                    if (section) {
+                        if (section.offsetTop <= scrollPos && section.offsetTop + section.offsetHeight > scrollPos) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    }
+                });
+            });
+            
+            // التنقل السلس
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // ===== FAQ SYSTEM =====
+        function initFAQ() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', () => {
+                    // إغلاق جميع العناصر الأخرى
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // تبديل العنصر الحالي
+                    item.classList.toggle('active');
+                });
+            });
+        }
+
+        // ===== CART SYSTEM =====
+        function addToCart(serviceId, duration, price) {
+            const currentLang = document.documentElement.lang;
+            const serviceName = getServiceName(serviceId);
+            
+            const cartItem = {
+                id: Date.now(),
+                serviceId,
+                serviceName,
+                duration,
+                price,
+                quantity: 1
+            };
+            
+            // حفظ في localStorage
+            let cart = JSON.parse(localStorage.getItem('graphosCart')) || [];
+            cart.push(cartItem);
+            localStorage.setItem('graphosCart', JSON.stringify(cart));
+            
+            showNotification(
+                currentLang === 'ar' ? 
+                `تم إضافة ${serviceName} إلى سلة الطلبات! 🛒` : 
+                `${serviceName} added to cart! 🛒`,
+                'success'
+            );
+            
+            // فتح نافذة الدفع
+            showSTCPay(price);
+        }
+
+        function getServiceName(serviceId) {
+            const services = {
+                1: { ar: 'تصميم شعار', en: 'Logo Design' },
+                2: { ar: 'فيديو تسويقي', en: 'Marketing Video' },
+                3: { ar: 'عرض تقديمي', en: 'Presentation' },
+                4: { ar: 'موقع إلكتروني', en: 'Website' },
+                5: { ar: 'الباقة الشاملة', en: 'Full Package' },
+                6: { ar: 'إعطاء فكرة', en: 'Idea Generation' }
+            };
+            
+            const currentLang = document.documentElement.lang;
+            return services[serviceId] ? services[serviceId][currentLang === 'ar' ? 'ar' : 'en'] : 'Service';
+        }
+
+        // ===== STC PAY INTEGRATION =====
+        function showSTCPay(amount) {
+            const currentLang = document.documentElement.lang;
+            
+            // إنشاء نافذة الدفع
+            const paymentModal = document.createElement('div');
+            paymentModal.className = 'payment-modal';
+            paymentModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+            `;
+            
+            paymentModal.innerHTML = `
+                <div style="background: white; padding: 2rem; border-radius: 20px; text-align: center; max-width: 400px; width: 90%;">
+                    <h2 style="color: var(--primary); margin-bottom: 1rem;">
+                        ${currentLang === 'ar' ? 'الدفع عبر STC Pay' : 'Payment via STC Pay'}
+                    </h2>
+                    <div style="font-size: 3rem; color: var(--secondary); margin: 1rem 0;">${amount} ${currentLang === 'ar' ? 'ريال' : 'SAR'}</div>
+                    <p style="margin-bottom: 2rem; color: var(--text);">
+                        ${currentLang === 'ar' ? 'لإتمام الطلب، يرجى التحويل إلى:' : 'To complete your order, please transfer to:'}
+                    </p>
+                    <div style="background: var(--gold-light); padding: 1rem; border-radius: 10px; margin-bottom: 2rem;">
+                        <div style="font-weight: bold; font-size: 1.2rem; margin-bottom: 0.5rem;">+966 53 368 2916</div>
+                        <div style="color: var(--text); opacity: 0.8;">STC Pay</div>
+                    </div>
+                    <p style="margin-bottom: 2rem; font-size: 0.9rem; color: #666;">
+                        ${currentLang === 'ar' ? 'بعد التحويل، سيتم تأكيد طلبك خلال دقائق' : 'After transfer, your order will be confirmed within minutes'}
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button onclick="this.closest('.payment-modal').remove()" style="
+                            padding: 1rem 2rem;
+                            border: 2px solid var(--secondary);
+                            background: transparent;
+                            color: var(--secondary);
+                            border-radius: 25px;
+                            cursor: pointer;
+                            font-weight: bold;
+                        ">
+                            ${currentLang === 'ar' ? 'إلغاء' : 'Cancel'}
+                        </button>
+                        <button onclick="completePayment(${amount})" style="
+                            padding: 1rem 2rem;
+                            background: var(--secondary);
+                            color: var(--primary);
+                            border: none;
+                            border-radius: 25px;
+                            cursor: pointer;
+                            font-weight: bold;
+                        ">
+                            ${currentLang === 'ar' ? 'تم الدفع' : 'Paid'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(paymentModal);
+            
+            // إغلاق النافذة عند النقر خارجها
+            paymentModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.remove();
+                }
+            });
+        }
+
+        function completePayment(amount) {
+            const currentLang = document.documentElement.lang;
+            
+            showNotification(
+                currentLang === 'ar' ? 
+                `شكراً لك! تم استلام طلبك بقيمة ${amount} ريال وسيتم التواصل معك قريباً. 📞` : 
+                `Thank you! Your order of ${amount} SAR has been received and we'll contact you soon. 📞`,
+                'success'
+            );
+            
+            // إغلاق نافذة الدفع
+            const paymentModal = document.querySelector('.payment-modal');
+            if (paymentModal) paymentModal.remove();
+            
+            // إرسال إشعار واتساب (محاكاة)
+            sendWhatsAppNotification(amount);
+        }
+
+        function sendWhatsAppNotification(amount) {
+            const currentLang = document.documentElement.lang;
+            const message = currentLang === 'ar' ? 
+                `مرحباً! لدي طلب جديد بقيمة ${amount} ريال. يرجى التواصل معي.` :
+                `Hello! I have a new order for ${amount} SAR. Please contact me.`;
+            
+            // محاكاة إرسال إشعار
+            setTimeout(() => {
+                showNotification(
+                    currentLang === 'ar' ? 
+                    'تم إرسال إشعار الطلب إلى فريق الدعم 📨' :
+                    'Order notification sent to support team 📨',
+                    'info'
+                );
+            }, 1000);
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        function updateYear() {
+            const yearElement = document.getElementById('currentYear');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+        }
+
+        // ===== PERFORMANCE OPTIMIZATIONS =====
+        function initPerformanceOptimizations() {
+            // Lazy loading للصور
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.classList.remove('lazy');
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }
+
+            // تحسين الأداء على الهواتف
+            if ('ontouchstart' in window) {
+                document.documentElement.classList.add('touch-device');
+            }
+        }
+
+        // ===== ERROR HANDLING =====
+        window.addEventListener('error', function(e) {
+            console.error('Error occurred:', e.error);
+            showNotification(
+                document.documentElement.lang === 'ar' ? 
+                'حدث خطأ غير متوقع. يرجى تحديث الصفحة.' :
+                'An unexpected error occurred. Please refresh the page.',
+                'error'
+            );
+        });
+
+        // ===== OFFLINE SUPPORT =====
+        window.addEventListener('online', function() {
+            showNotification(
+                document.documentElement.lang === 'ar' ? 
+                'تم استعادة الاتصال بالإنترنت' :
+                'Internet connection restored',
+                'success'
+            );
+        });
+
+        window.addEventListener('offline', function() {
+            showNotification(
+                document.documentElement.lang === 'ar' ? 
+                'فقدان الاتصال بالإنترنت. بعض الميزات قد لا تعمل.' :
+                'Internet connection lost. Some features may not work.',
+                'warning'
+            );
+        });
+    </script>
+</body>
+</html>
