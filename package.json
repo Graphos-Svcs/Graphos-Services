@@ -1,0 +1,25 @@
+{
+  "name": "graphos-services",
+  "version": "3.0.0",
+  "description": "منصة Graphos Services الرقمية المتقدمة",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=3000",
+    "build": "echo 'بناء الموقع مكتمل'",
+    "export": "node export-data.js"
+  },
+  "keywords": [
+    "graphos",
+    "services",
+    "digital",
+    "platform",
+    "ai",
+    "design",
+    "development"
+  ],
+  "author": "Graphos Services Team",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
